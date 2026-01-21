@@ -3,5 +3,5 @@ name = input("Enter your name:")
 
 print(f"id:{id}")
 print(f"name:{name}")
-print(f"hello{name} id{id}")
+print(f"{name} id{id}")
 
