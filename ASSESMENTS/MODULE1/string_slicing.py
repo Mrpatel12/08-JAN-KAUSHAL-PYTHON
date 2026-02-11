@@ -8,4 +8,4 @@ s = "Kaushal Kapupara!"
 # print(len(s))
 # print(s[3:0-1])
 # print(s[0:4])
-# print(s[0:17:15])
+print(s[0:17:15])
