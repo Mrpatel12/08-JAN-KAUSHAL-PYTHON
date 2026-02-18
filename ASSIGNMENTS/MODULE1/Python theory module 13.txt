@@ -1,6 +1,5 @@
-                                                   MODULE - 13
-
-                                              INTRODUCTION TO PYTHON
+                        MODULE - 1
+                       INTRODUCTION TO PYTHON
 
 
 Q1). Introduction to Python and its Features (simple, high-level, interpreted language).
