@@ -1,3 +1,4 @@
-from tops import multiplication
+from math import*
 
-multiplication()
+print(sqrt(16))
+print(pi)

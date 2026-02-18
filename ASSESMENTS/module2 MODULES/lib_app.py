@@ -1,5 +1,4 @@
-from tops import *
+from math import sqrt,pi
 
-sum(10,21)
-
-
+print(sqrt(16))
+print(pi)

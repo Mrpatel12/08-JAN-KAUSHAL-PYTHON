@@ -1,3 +1,4 @@
-from tops import getsum
+import math as a
 
-getsum()
+print(a.sqrt(16))
+

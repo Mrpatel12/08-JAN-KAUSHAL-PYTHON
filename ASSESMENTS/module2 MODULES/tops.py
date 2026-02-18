@@ -1,14 +1,4 @@
-a=8
-b=9
+import math
 
-def getdata():
-   sum = a + b
-   print("Sum:",sum)
-   mul = a*b
-   print("Multiplication:",mul) 
-
-import tops
-
-
-
-
+print(math.sqrt(16))
+print(math.pi)
