@@ -1,9 +1,3 @@
-# import requests
-# response = requests.get('https://fakestoreapi.com/products/1')
-# print(response.json())
-
-
-
 import requests
 
 url="https://fakestoreapi.com/products"
