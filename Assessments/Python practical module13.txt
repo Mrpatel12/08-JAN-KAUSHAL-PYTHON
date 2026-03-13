@@ -1,0 +1,558 @@
+LAB 1
+
+1). Write a Python program that prints "Hello, World!"
+
+Ans.  print("Hello world")
+
+2).Set up Python on your local machine and write a program to display your name.
+
+Ans. 
+      name = "Kaushal"
+      print("Name:",name)
+
+
+LAB 2
+
+1).Write a Python program that demonstrates the correct use of indentation, comments, and
+   variables following PEP 8 guidelines.
+
+Ans.
+
+import math
+import sys
+
+
+def area_of_circle(radius: float) -> float:
+ 
+ 
+    pi = math.pi
+    area = pi * radius**2
+
+  
+    return area
+
+DEFAULT_RADIUS = 5.0
+
+def main():
+    circle_radius = DEFAULT_RADIUS
+   
+    calculated_area = area_of_circle(circle_radius)
+
+   
+    print(f"The area of a circle with radius {circle_radius} is: {calculated_area:.2f}")
+
+if __name__ == "__main__":
+    main()
+
+
+LAB 3
+
+1).How does the Python code structure work
+
+Ans.
+
+x = [1, 2, 3, 4]
+
+print(x[1:3])  
+
+
+2).How to create variables in Python?
+
+Ans.
+age = 22
+name = "Kaushal"
+Height = 5.9
+is_student = True
+
+print("Age:",age)
+print("Name:",name)
+print("Height:",Height)
+print("is_student:",is_student)
+
+
+3).How to take user input using the input() function
+
+Ans.
+
+input = input("Enter Your Name:")
+
+print("My name is",input)
+
+4).How to check the type of a variable dynamically using type()
+
+Ans.
+
+s="Hello, world"
+type_of_s=type(s)
+print(type_of_s)
+
+
+LAB 4
+
+1). Write a Python program to find greater and less than a number using if_else.
+
+Ans.
+
+a=int(input("Enter a Value A :"))
+b=int(input("Enter a Value b :"))
+
+
+
+print("A",a)
+print("B",b)
+
+if a>=b:
+    print("A is max")
+    
+else:
+    print("B is Max ")
+
+
+2). Write a Python program to check if a number is prime using if_else
+
+Ans.
+
+number = int(input("Enter a Number:"))
+
+if number <=2:
+    print(f"{number}is a Prime Number :")
+
+else:
+    print(f"{number} is not a Prime Number :") 
+
+
+3).Write a python program to calculate grades based on percentage using if_else ladder
+
+Ans.
+
+int = int(input("Enter Your percentage:"))
+
+if int>=90:
+    print("Your Grade is A")
+
+elif int>=80:
+    print("Your Grade is B:")
+
+elif int>=70:
+      print("Your Grade is C:")
+
+elif int>=60:
+      print("Your Grade is D:")
+
+elif int>=50:
+     print("Your Grade is E:")
+
+elif int>=40:
+     print("Your Grade is F:")
+
+
+4).Write a Python program to check if a person is eligible to donate blood using Nested if_else.
+
+Ans.
+
+int = input("Enter Your Blood Group:")
+
+if int =="O+":
+    print("You can Donate to O+,A+,B+,AB+")
+
+elif int =="O-":
+    print("You can Donate to all Blood groups:")
+
+elif int =="A+":
+    print("You can donate to A+,AB+")
+
+elif int =="A-":
+    print("You can donate to A+,A-,AB,AB+")
+
+elif int =="B+":
+    print("You can donate to B+,AB+")
+
+elif int =="B-":
+    print("You can donate to B+,B-,AB+,AB-")
+
+elif int =="AB+":
+    print("You can donate to AB+")
+
+elif int =="AB-":
+    print("You can donate to AB+,AB-")
+
+
+LAB 5
+
+1). Write a Python program to print each fruit in a list using a simple for
+    loop. List1 = ['apple', 'banana', 'mango']
+
+Ans.
+
+s = ['Apple','Banana','Mango']
+
+for fruit in s:
+    print(fruit)
+
+print("fruits list:",s)
+
+
+2).Write a Python program to find the length of each string in List1
+
+Ans.
+
+s = ['k','a','u','s','h','a','l']
+
+print("length of the list is:",len(s))
+
+       
+3).Write a Python program to find a specific string in the list using a simple
+   for loop and if condition.
+
+Ans.
+s = ['My','name','is','Kaushal']
+
+for My in s:
+    if My == 'Kaushal':
+        print("String found")
+        break
+    
+else:
+    print("String not found")
+
+4). Print this pattern using nested for loop:
+     *
+     **
+     ***
+     ****
+     *****
+
+Ans.
+
+rows = int(input("Enter number of rows for the pattern:"))
+
+rows = 5
+i = rows
+while i >= 1:
+    j = 1
+    while j <= i:
+        print(" * ", end="")
+        j += 1
+    print()  
+    i -= 1
+
+LAB 6
+
+1).Write a generator function that generates the first 10 even numbers
+
+Ans.
+def generate_first_ten_evens():
+    
+    count = 0
+    num = 0
+    while count < 10:
+        yield num
+        num += 2
+        count += 1
+
+print("Generating the first 10 even numbers:")
+for even_num in generate_first_ten_evens():
+    print(even_num)
+
+
+2). Write a Python program that uses a custom iterator to iterate over a list of integers.
+
+Ans.
+
+class CustomIterator:
+    def __init__(self, data):
+        self.data = data
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index >= len(self.data):
+            raise StopIteration
+        current_item = self.data[self.index]
+        self.index += 1
+        return current_item
+
+my_list = [10, 20, 30, 40, 50]
+custom_iterator = CustomIterator(my_list)
+
+print("Iterating over the list using the custom iterator:")
+for number in custom_iterator:
+    print(number)
+
+print("\nDemonstrating manual iteration:")
+iterator_manual = iter(my_list) # Use the built-in iter for comparison
+
+try:
+    print(next(iterator_manual))
+    print(next(iterator_manual))
+    iterator_custom_manual = CustomIterator(my_list)
+    print(next(iterator_custom_manual))
+except StopIteration:
+    print("Iteration finished.")
+
+
+
+LAB 7
+
+1).Write a Python program to print "Hello" using a string
+
+Ans.
+
+x = "Hello"
+
+print(x) 
+
+
+2).Write a Python program to allocate a string to a variable and print it.
+
+Ans.
+
+   my_string = "Hello, World!"
+   print(my_string)
+
+3).Write a Python program to print a string using triple quotes
+
+Ans.
+   s = """Kaushal Kapupara"""
+
+   print(s)
+
+4). Write a Python program to access the first character of a string using Index Value.
+
+Ans.
+
+    my_string = "Hello, World!"
+ 
+    first_character = my_string[0]
+
+    print(f"Original string: {my_string}")
+    
+    print(f"First character accessed by index 0: {first_character}")
+
+
+5). Write a Python program to access the string from the second position
+    onwards using slicing.
+
+Ans.
+     my_string = "Hello, World!"
+
+     sliced_string = my_string[1:]
+
+     print("Original string:", my_string)
+
+     print("Sliced string (from the second position onwards):", sliced_string)
+
+6). Write a Python program to access a string up to the fifth character
+
+Ans.
+
+    my_string = "Hello, world!"
+
+    first_five_chars = my_string[:5]
+
+    print(first_five_chars)
+
+    short_string = "Python"
+    
+    first_five = short_string[:5]
+
+    print(first_five)
+
+
+7). Write a Python program to print the substring between index values 1
+    and 4
+
+Ans.
+
+     original_string = "Python"
+
+     substring = original_string[1:4]
+
+     print(f"The original string is: {original_string}")
+     
+     print(f"The substring between index 1 and 4 is: {substring}")
+
+8). Write a Python program to print a string from the last character
+ 
+Ans.
+
+    def reverse_string_slicing(s):
+    return s[::-1]
+
+    input_string = "Hello World"
+    reversed_string = reverse_string_slicing(input_string)
+    print(reversed_string)
+
+9). Write a Python program to print every alternate character from the
+    string starting from index 1.
+
+Ans.
+
+def print_alternate_characters(input_string):
+
+    alternate_chars = input_string[1::2]
+    print(f"Original string: {input_string}")
+    print(f"Alternate characters starting from index 1: {alternate_chars}")
+
+    test_string1 = "Hello, world!"
+    print_alternate_characters(test_string1)
+
+    print("-" * 20)
+
+    test_string2 = "Python Programming"
+    print_alternate_characters(test_string2)
+
+
+LAB 8
+
+1). Write a Python program to skip 'banana' in a list using the continue
+    statement. List1 = ['apple', 'banana', 'mango']
+
+Ans. 
+s = ['Apple','Banana','Mango']
+
+for fruit in s:
+    if fruit == 'Banana':
+        continue
+    print("Fruit:",fruit)
+
+2).Write a Python program to stop the loop once 'banana' is found using
+   the break statement.
+
+Ans.
+s = ['Apple','Banana','Mango']
+
+for fruit in s:
+    if fruit == 'Banana':
+        break
+    print("Fruit:",fruit)
+
+
+LAB 9
+
+1).Write a Python program to demonstrate string slicing. 
+                  
+                    AND
+
+2).Write a Python program that manipulates and prints strings using various string methods
+
+
+Ans.
+
+my_string = "Python String Slicing"
+
+print(f"Original string: '{my_string}'\n")
+
+slice1 = my_string[:6]
+print(f"From start to index 6: '{slice1}'") 
+
+slice2 = my_string[7:]
+print(f"From index 7 to end: '{slice2}'")
+
+slice3 = my_string[7:14]
+print(f"From index 7 to 14: '{slice3}'") 
+
+slice4 = my_string[:]
+print(f"Entire string: '{slice4}'") 
+
+slice5 = my_string[::2]
+print(f"Every second character: '{slice5}'")
+
+slice6 = my_string[0:15:3]
+print(f"Every third character (0-14): '{slice6}'")
+
+slice7 = my_string[-7:-1]
+print(f"Using negative indices (-7 to -1): '{slice7}'") 
+
+slice8 = my_string[-5:]
+print(f"Last 5 characters: '{slice8}'") 
+
+slice9 = my_string[::-1]
+print(f"Reversed string: '{slice9}'") 
+
+
+LAB 10
+
+1).Write a Python program to apply the map() function to square a list of numbers.
+
+Ans.
+numbers = [1, 2, 3, 4, 5]
+
+
+def square(n):
+    return n * n
+
+squared_numbers = map(square, numbers)
+
+
+squared_list = list(squared_numbers)
+
+print(f"Original numbers: {numbers}")
+print(f"Squared numbers: {squared_list}")
+
+squared_list_lambda = list(map(lambda n: n * n, numbers))
+print(f"Squared numbers (using lambda): {squared_list_lambda}")
+
+
+2).Write a Python program that uses reduce() to find the product of a list of numbers
+
+Ans.
+from functools import reduce
+
+def find_product(numbers):
+ 
+  Args:
+    numbers: A list of integers or floats.
+
+  Returns:
+    The product of all numbers in the list.
+
+  product = reduce(lambda x, y: x * y, numbers)
+  return product
+
+my_list = [2, 3, 5, 4]
+result = find_product(my_list)
+print(f"The list is: {my_list}")
+print(f"The product of the list using reduce() is: {result}")
+
+
+list_floats = [1.5, 2.0, 3.0]
+result_floats = find_product(list_floats)
+print(f"\nThe list is: {list_floats}")
+print(f"The product of the list using reduce() is: {result_floats}")
+
+
+3).Write a Python program that filters out even numbers using the filter() function.
+
+Ans.
+
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+
+def is_even(num):
+    return num % 2 == 0
+
+even_numbers_iterator = filter(is_even, numbers)
+
+even_numbers_list = list(even_numbers_iterator)
+
+# Print the original and filtered lists
+print(f"Original numbers: {numbers}")
+print(f"Even numbers (using filter()): {even_numbers_list}")
+
+even_numbers_lambda = list(filter(lambda num: num % 2 == 0, numbers))
+print(f"Even numbers (using lambda): {even_numbers_lambda}")
+
+
+
+
+
+
+
+
+
+
+
+
