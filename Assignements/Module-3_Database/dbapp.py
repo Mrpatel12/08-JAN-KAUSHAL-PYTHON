@@ -13,13 +13,12 @@ try:
 except Exception as e:
     print(e)    
 
-insert_data ="Insert into poduct_master(name,city)values('Kaushal','Jamnagar'),('Raj','Rajkot)')" 
+insert_data ="Insert into poduct_master(name,city)values" \
+"('Kaushal','Jamnagar'),('Raj','Rajkot)')" 
 try:
     db.execute(insert_data)
     db.commit()
     print("Record insreted")
 except Exception as e:
     print(e)    
-
-
-
+    
