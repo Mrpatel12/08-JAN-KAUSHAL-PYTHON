@@ -19,7 +19,8 @@ from django.urls import path
 from task import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('',views.index),
-    path('about/',views.about),
-]    
+  path('', views.index, name='index'),  
+  path('about/', views.about,name='about'),
+  path('contact/', views.contact, name='contact'),
+
+]
