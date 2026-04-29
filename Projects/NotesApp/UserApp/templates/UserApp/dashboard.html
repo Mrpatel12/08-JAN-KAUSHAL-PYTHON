@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="w-full max-w-7xl mx-auto px-4 py-8">
+    <!-- Dashboard Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+        <div>
+            <h1 class="text-4xl font-black text-gray-900 dark:text-white flex items-center gap-3">
+                Hello, {{ user.fullname|default:user.username }} 
+                <span class="text-2xl animate-bounce">👋</span>
+            </h1>
+            <p class="text-gray-500 dark:text-gray-400 font-medium mt-1">Here's what's happening with your ideas today.</p>
+        </div>
+        <div class="flex items-center gap-4">
+            {% if user.is_verified %}
+            <a href="{% url 'create_note' %}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-2xl shadow-xl hover:shadow-blue-500/25 transition-all flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                New Note
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Manual Verification Prompt -->
+    {% if not user.is_verified %}
+    <div class="mb-12 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/10 dark:to-orange-900/10 border border-yellow-200 dark:border-yellow-700/30 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden">
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="text-center md:text-left">
+                <h3 class="text-2xl font-black text-yellow-800 dark:text-yellow-400 mb-2">Verify Your Account</h3>
+                <p class="text-yellow-700 dark:text-yellow-500/80 text-lg max-w-xl">
+                    To unlock full features like creating and sharing notes, please verify your email address. 
+                    Would you like to start the verification process now?
+                </p>
+            </div>
+            <div class="flex gap-4">
+                <a href="{% url 'send_verification_otp' %}" class="bg-yellow-600 hover:bg-yellow-500 text-white font-black px-8 py-4 rounded-2xl shadow-xl hover:shadow-yellow-600/25 transition-all">
+                    Yes, Verify Now
+                </a>
+                <button @click="$el.closest('.mb-12').remove()" class="px-8 py-4 rounded-2xl font-bold text-yellow-800 dark:text-yellow-500 hover:bg-yellow-100 dark:hover:bg-yellow-900/20 transition-all">
+                    Maybe Later
+                </button>
+            </div>
+        </div>
+        <!-- Decoration -->
+        <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+    </div>
+    {% endif %}
+
+    <!-- Quick Stats (Visual Only) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-sm transition-colors">
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-wider mb-2">Total Notes</p>
+            <p class="text-3xl font-black text-blue-600">{{ notes.count }}</p>
+        </div>
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-sm transition-colors">
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-wider mb-2">Account Status</p>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">Verified</span>
+        </div>
+    </div>
+
+    <!-- Notes Grid -->
+    {% if notes %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for note in notes %}
+                <div class="group bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm transition-all hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden">
+                    <!-- Card Accent -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 dark:bg-blue-500/10 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{{ note.title }}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-8 whitespace-pre-wrap line-clamp-4 leading-relaxed">{{ note.content }}</p>
+                    
+                    <div class="flex items-center justify-between pt-6 border-t border-gray-50 dark:border-gray-800">
+                        <div class="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase tracking-tighter">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            {{ note.updated_at|date:"M d, Y" }}
+                        </div>
+                        <div class="flex gap-3">
+                            <a href="{% url 'edit_note' note.id %}" class="p-3 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-blue-600 hover:text-white transition-all shadow-sm" title="Edit">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                            </a>
+                            <a href="{% url 'delete_note' note.id %}" class="p-3 rounded-xl bg-gray-50 dark:bg-gray-800 text-red-500 hover:bg-red-600 hover:text-white transition-all shadow-sm" title="Delete" onclick="return confirm('Delete this note permanently?')">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-24 bg-white dark:bg-gray-900 rounded-[3rem] border border-dashed border-gray-200 dark:border-gray-800 transition-colors">
+            <div class="w-24 h-24 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-8 text-blue-600 dark:text-blue-400">
+                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2zM14 4v4h4"></path></svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Your space is empty.</h2>
+            <p class="text-gray-600 dark:text-gray-400 text-lg mb-10 max-w-md mx-auto">Start capturing your brilliance today. Every great project begins with a single note.</p>
+            <a href="{% url 'create_note' %}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-black px-10 py-4 rounded-2xl shadow-xl transition-all">
+                Create First Note
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

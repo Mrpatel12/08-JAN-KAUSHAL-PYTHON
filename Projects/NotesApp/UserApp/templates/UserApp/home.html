@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="w-full relative overflow-hidden">
+    <!-- Hero Section -->
+    <section class="relative pt-20 pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="text-center">
+                <!-- Floating Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-widest mb-8 animate-bounce">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    Version 2.0 is live
+                </div>
+
+                <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 text-gray-900 dark:text-white leading-none">
+                    Write once. <br/>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400">Sync everywhere.</span>
+                </h1>
+                
+                <p class="max-w-2xl mx-auto text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 leading-relaxed">
+                    NotesApp is the ultimate companion for your ideas. Secure, fast, and stunningly beautiful on every device.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="group relative bg-blue-600 hover:bg-blue-500 text-white font-black px-10 py-5 rounded-[2rem] shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-xl flex items-center gap-3">
+                            Open Dashboard
+                            <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'signup' %}" class="group relative bg-blue-600 hover:bg-blue-500 text-white font-black px-10 py-5 rounded-[2rem] shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-xl flex items-center gap-3">
+                            Start Writing Now
+                            <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                        <a href="{% url 'about' %}" class="text-gray-600 dark:text-gray-300 font-bold hover:text-gray-900 dark:hover:text-white transition-colors text-lg underline decoration-2 decoration-blue-500 underline-offset-8">
+                            Why NotesApp?
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Dashboard Preview -->
+            <div class="mt-24 relative max-w-5xl mx-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-50 dark:from-gray-950 to-transparent z-10 h-32 bottom-0 top-auto"></div>
+                <div class="rounded-[3rem] overflow-hidden border border-gray-200 dark:border-gray-800 shadow-[0_0_100px_rgba(59,130,246,0.15)] transform hover:scale-[1.01] transition-all duration-700">
+                    <img src="{% static 'images/mockup.png' %}" alt="App Dashboard" class="w-full h-auto">
+                </div>
+            </div>
+        </div>
+
+        <!-- Animated Background Orbs -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-0 pointer-events-none overflow-hidden">
+            <div class="absolute -top-1/4 left-0 w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[128px] animate-pulse"></div>
+            <div class="absolute top-1/2 right-0 w-[400px] h-[400px] bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[128px] delay-700"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-32 bg-white dark:bg-gray-950 transition-colors">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Feature 1 -->
+                <div class="group p-10 rounded-[2.5rem] bg-gray-50 dark:bg-gray-900/50 border border-transparent hover:border-blue-500/30 transition-all duration-500">
+                    <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-8 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Military-Grade Security</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
+                        Your thoughts are private. We use end-to-end encryption and two-factor authentication to keep your data safe.
+                    </p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="group p-10 rounded-[2.5rem] bg-gray-50 dark:bg-gray-900/50 border border-transparent hover:border-indigo-500/30 transition-all duration-500">
+                    <div class="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center mb-8 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Lightning Performance</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
+                        Zero lag. Zero waiting. Built with a performance-first mindset, NotesApp is ready as soon as you are.
+                    </p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="group p-10 rounded-[2.5rem] bg-gray-50 dark:bg-gray-900/50 border border-transparent hover:border-purple-500/30 transition-all duration-500">
+                    <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mb-8 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Universal Sync</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
+                        Start a note on your phone, finish it on your desktop. Your content is always perfectly in sync.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="py-24 bg-gray-50 dark:bg-gray-900/30">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest text-sm mb-12">Trusted by 10,000+ teams worldwide</p>
+            <div class="flex flex-wrap justify-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all">
+                <span class="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">TECHCORE</span>
+                <span class="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">CLOUDFY</span>
+                <span class="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">PIXELATE</span>
+                <span class="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">NEXUS</span>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="w-full">
+    <!-- Hero Section -->
+    <section class="relative py-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600">
+                    Our Mission is Simple.
+                </h1>
+                <p class="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400 mb-10">
+                    We're building the fastest, most beautiful note-taking experience for creative minds and productive teams.
+                </p>
+                <div class="flex justify-center gap-4">
+                    <a href="{% url 'signup' %}" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-2xl font-bold transition-all shadow-xl hover:shadow-blue-500/25">Get Started Free</a>
+                    <a href="#vision" class="px-8 py-4 rounded-2xl font-bold text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <!-- Background Decoration -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-0 opacity-10 pointer-events-none">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[128px]"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500 rounded-full blur-[128px]"></div>
+        </div>
+    </section>
+
+    <!-- Image Slider Section -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-900/50" x-data="{ activeSlide: 1 }">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-video md:aspect-[21/9]">
+                <!-- Slide 1 -->
+                <div x-show="activeSlide === 1" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="absolute inset-0">
+                    <img src="{% static 'images/mockup.png' %}" alt="App Interface" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-12">
+                        <div class="text-white">
+                            <h3 class="text-3xl font-bold mb-2">Beautiful Dark Mode</h3>
+                            <p class="text-gray-200 text-lg">Designed to reduce eye strain and look stunning in any environment.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div x-show="activeSlide === 2" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="absolute inset-0">
+                    <img src="{% static 'images/team.png' %}" alt="Our Team" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-12">
+                        <div class="text-white">
+                            <h3 class="text-3xl font-bold mb-2">Built by Experts</h3>
+                            <p class="text-gray-200 text-lg">Our diverse team of engineers and designers is dedicated to your productivity.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Dots -->
+                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                    <button @click="activeSlide = 1" :class="activeSlide === 1 ? 'bg-white w-8' : 'bg-white/50 w-2'" class="h-2 rounded-full transition-all duration-300"></button>
+                    <button @click="activeSlide = 2" :class="activeSlide === 2 ? 'bg-white w-8' : 'bg-white/50 w-2'" class="h-2 rounded-full transition-all duration-300"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision & Values -->
+    <section id="vision" class="py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-blue-600 font-bold tracking-widest uppercase text-sm">Our Vision</span>
+                    <h2 class="text-4xl font-bold mt-4 mb-6 text-gray-900 dark:text-white leading-tight">We believe that great ideas deserve a great home.</h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                        NotesApp started with a simple observation: most productivity tools were getting in the way of productivity. They were too slow, too cluttered, or too complicated. We wanted to build something that felt like a natural extension of your mind.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600 mt-1">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white">Privacy First</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Your notes are yours. We encrypt everything and never sell your data.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 mt-1">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white">Lightning Fast</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Zero lag, instant sync, and offline support. Focus on writing, not waiting.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-4">
+                        <div class="bg-blue-600 h-64 rounded-3xl overflow-hidden shadow-xl">
+                            <img src="{% static 'images/user1.png' %}" class="w-full h-full object-cover" alt="Happy User">
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-800 p-8 rounded-3xl">
+                            <h3 class="text-4xl font-bold text-blue-600">10k+</h3>
+                            <p class="text-gray-500 font-medium">Active Users</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4 pt-8">
+                        <div class="bg-gray-100 dark:bg-gray-800 p-8 rounded-3xl">
+                            <h3 class="text-4xl font-bold text-purple-600">4.9/5</h3>
+                            <p class="text-gray-500 font-medium">App Rating</p>
+                        </div>
+                        <div class="bg-indigo-600 h-64 rounded-3xl overflow-hidden shadow-xl">
+                            <img src="{% static 'images/user2.png' %}" class="w-full h-full object-cover" alt="Happy User">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-900/50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 dark:text-white">Loved by creators worldwide.</h2>
+                <p class="text-gray-600 dark:text-gray-400 mt-4">See what our community has to say about their experience.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-800 relative">
+                    <div class="absolute -top-4 -left-4 text-6xl text-blue-100 dark:text-blue-900/20">"</div>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 italic mb-8 relative z-10">
+                        "NotesApp has completely changed how I organize my research. It's so fast that I never lose a thought. The dark mode is also the best I've ever seen."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <img src="{% static 'images/user1.png' %}" class="w-12 h-12 rounded-full object-cover ring-2 ring-blue-500" alt="Sarah J.">
+                        <div>
+                            <h5 class="font-bold text-gray-900 dark:text-white">Sarah Jenkins</h5>
+                            <p class="text-sm text-gray-500">Senior Content Strategist</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-800 relative">
+                    <div class="absolute -top-4 -left-4 text-6xl text-blue-100 dark:text-blue-900/20">"</div>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 italic mb-8 relative z-10">
+                        "As a developer, I appreciate the clean code and the speed. It's my go-to for project documentation and quick code snippets."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <img src="{% static 'images/user2.png' %}" class="w-12 h-12 rounded-full object-cover ring-2 ring-purple-500" alt="Marcus T.">
+                        <div>
+                            <h5 class="font-bold text-gray-900 dark:text-white">Marcus Thorne</h5>
+                            <p class="text-sm text-gray-500">Full Stack Developer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-900 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl">
+                <div class="relative z-10">
+                    <h2 class="text-4xl md:text-6xl font-bold text-white mb-6">Ready to start writing?</h2>
+                    <p class="text-blue-100 text-xl max-w-2xl mx-auto mb-10">Join over 10,000 users who have found a better way to capture their thoughts.</p>
+                    <a href="{% url 'signup' %}" class="bg-white text-blue-600 px-10 py-4 rounded-2xl font-extrabold text-lg hover:bg-blue-50 transition-all shadow-xl inline-block">Create Your Free Account</a>
+                </div>
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl"></div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

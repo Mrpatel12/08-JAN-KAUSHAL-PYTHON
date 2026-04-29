@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="w-full max-w-2xl mx-auto py-12 px-4">
+    <div class="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 md:p-12 shadow-2xl border border-gray-100 dark:border-gray-800 transition-colors">
+        <div class="mb-10 flex items-center justify-between">
+            <div>
+                <h2 class="text-4xl font-black text-gray-900 dark:text-white">
+                    {% if form.instance.pk %}Edit Note{% else %}New Note{% endif %}
+                </h2>
+                <p class="text-gray-500 dark:text-gray-400 font-medium mt-1">Capture your brilliance.</p>
+            </div>
+            <a href="{% url 'dashboard' %}" class="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </a>
+        </div>
+
+        <form method="post" class="space-y-8">
+            {% csrf_token %}
+            
+            <div class="space-y-2">
+                <label for="id_title" class="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">Title</label>
+                <input type="text" name="title" id="id_title" value="{{ form.title.value|default:'' }}" required placeholder="Give your note a title..." 
+                       class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl px-6 py-4 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all outline-none text-xl font-bold">
+            </div>
+
+            <div class="space-y-2">
+                <label for="id_content" class="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">Content</label>
+                <textarea name="content" id="id_content" rows="10" required placeholder="Start writing here..." 
+                          class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-[2rem] px-6 py-6 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all outline-none leading-relaxed">{{ form.content.value|default:'' }}</textarea>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                <button type="submit" class="flex-grow bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-2xl shadow-xl hover:shadow-blue-500/25 transition-all transform hover:-translate-y-1 text-lg">
+                    Save Note
+                </button>
+                <a href="{% url 'dashboard' %}" class="px-10 py-5 rounded-2xl font-bold text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-center">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
