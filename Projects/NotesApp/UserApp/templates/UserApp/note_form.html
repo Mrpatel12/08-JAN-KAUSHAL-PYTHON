@@ -18,6 +18,19 @@
         <form method="post" class="space-y-8">
             {% csrf_token %}
             
+            {% if form.errors %}
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-6 text-red-600 dark:text-red-400">
+                <p class="font-bold mb-2">Please correct the following errors:</p>
+                <ul class="list-disc list-inside text-sm">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ field|title }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
             <div class="space-y-2">
                 <label for="id_title" class="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">Title</label>
                 <input type="text" name="title" id="id_title" value="{{ form.title.value|default:'' }}" required placeholder="Give your note a title..." 

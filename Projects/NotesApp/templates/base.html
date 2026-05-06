@@ -23,20 +23,24 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
+        .glass-light { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(226, 232, 240, 0.8); }
+        .premium-shadow { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.02); }
+        .premium-shadow-hover { transition: all 0.3s ease; }
+        .premium-shadow-hover:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.03); transform: translateY(-2px); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-white antialiased min-h-screen relative selection:bg-blue-500 selection:text-white transition-colors duration-300">
+<body class="bg-slate-50 text-slate-900 dark:bg-gray-950 dark:text-white antialiased min-h-screen relative selection:bg-blue-500 selection:text-white transition-colors duration-500">
 
     <!-- Global Toast Notifications -->
     {% if messages %}
     <div class="fixed top-5 right-5 z-50 flex flex-col gap-3">
         {% for message in messages %}
             <div x-data="{ show: true }" x-show="show" x-transition.duration.300ms
-                 class="flex items-center p-4 rounded-lg shadow-lg max-w-sm w-full border-l-4 
-                 {% if message.tags == 'success' %}bg-white dark:bg-gray-900 border-green-500 text-green-600 dark:text-green-400{% elif message.tags == 'error' %}bg-white dark:bg-gray-900 border-red-500 text-red-600 dark:text-red-400{% else %}bg-white dark:bg-gray-900 border-blue-500 text-blue-600 dark:text-blue-400{% endif %} transition-colors duration-300"
+                 class="flex items-center p-4 rounded-2xl shadow-xl max-w-sm w-full border border-gray-100 dark:border-gray-800 
+                 {% if message.tags == 'success' %}bg-white/90 dark:bg-gray-900/90 border-green-500/20 text-green-600 dark:text-green-400{% elif message.tags == 'error' %}bg-white/90 dark:bg-gray-900/90 border-red-500/20 text-red-600 dark:text-red-400{% else %}bg-white/90 dark:bg-gray-900/90 border-blue-500/20 text-blue-600 dark:text-blue-400{% endif %} backdrop-blur-md"
                  role="alert">
-                <div class="ml-3 text-sm font-medium mr-4 flex-grow">{{ message }}</div>
-                <button @click="show = false" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                <div class="ml-3 text-sm font-bold mr-4 flex-grow">{{ message }}</div>
+                <button @click="show = false" class="text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
@@ -45,7 +49,7 @@
     {% endif %}
 
     <!-- Navbar -->
-    <nav x-data="{ open: false }" class="fixed w-full z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-all duration-300">
+    <nav x-data="{ open: false }" class="fixed w-full z-40 glass-light dark:bg-gray-950/80 dark:backdrop-blur-md dark:border-b dark:border-gray-800 transition-all duration-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
@@ -62,7 +66,10 @@
                     <a href="{% url 'blog' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">Blog</a>
                     <a href="{% url 'contact' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">Contact</a>
                     {% if user.is_superuser %}
-                    <a href="{% url 'admin_dashboard' %}" class="text-blue-600 dark:text-blue-400 px-3 py-2 rounded-md transition-colors border border-blue-200 dark:border-blue-900/50 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-bold">Admin Panel</a>
+                    <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-sm transition-all shadow-lg shadow-blue-600/25 group">
+                        <svg class="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Admin Panel
+                    </a>
                     {% endif %}
                     
                     <div class="pl-4 flex items-center space-x-4 border-l border-gray-200 dark:border-gray-700">
@@ -76,9 +83,13 @@
                             <!-- User Profile Link -->
                             <div class="flex items-center gap-3 pl-4 border-l border-gray-200 dark:border-gray-700">
                                 <a href="{% url 'profile' %}" class="flex items-center gap-2 group">
-                                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform">
-                                        {{ user.fullname|slice:":1"|upper|default:user.username|slice:":1"|upper }}
-                                    </div>
+                                    {% if user.profile_photo %}
+                                        <img src="{{ user.profile_photo.url }}" alt="{{ user.fullname }}" class="w-9 h-9 rounded-full object-cover shadow-lg group-hover:scale-110 transition-transform ring-2 ring-blue-500/20">
+                                    {% else %}
+                                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform">
+                                            {{ user.fullname|slice:":1"|upper|default:user.username|slice:":1"|upper }}
+                                        </div>
+                                    {% endif %}
                                     <div class="hidden lg:block text-left">
                                         <p class="text-xs font-bold text-gray-400 uppercase tracking-tighter leading-none mb-0.5">Welcome</p>
                                         <p class="text-sm font-black text-gray-900 dark:text-white leading-none">{{ user.fullname|default:user.username }}</p>
@@ -121,10 +132,14 @@
                 {% endif %}
                 <div class="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
                     {% if user.is_authenticated %}
-                        <div class="flex items-center gap-3 px-3 py-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl mb-2">
-                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
-                                {{ user.fullname|slice:":1"|upper }}
-                            </div>
+                        <div class="flex items-center gap-3 px-3 py-4 bg-slate-50 dark:bg-gray-800/50 rounded-2xl mb-2">
+                            {% if user.profile_photo %}
+                                <img src="{{ user.profile_photo.url }}" alt="{{ user.fullname }}" class="w-10 h-10 rounded-full object-cover shadow-md">
+                            {% else %}
+                                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-black">
+                                    {{ user.fullname|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
                             <div>
                                 <p class="text-sm font-black text-gray-900 dark:text-white">{{ user.fullname }}</p>
                                 <p class="text-xs text-gray-500">{{ user.email }}</p>

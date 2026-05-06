@@ -6,6 +6,7 @@ class CustomUser(AbstractUser):
     mobile = models.CharField(max_length=15)
     city = models.CharField(max_length=50)
     is_verified = models.BooleanField(default=False)
+    profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
 
 class OTP(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

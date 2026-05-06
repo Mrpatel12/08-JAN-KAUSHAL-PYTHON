@@ -1,7 +1,7 @@
 from django import forms
 from .models import CustomUser, Note
 
-input_classes = "w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl px-6 py-4 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all outline-none"
+input_classes = "w-full bg-slate-50 dark:bg-gray-800 border-none rounded-2xl px-6 py-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-blue-600 transition-all outline-none"
 
 class SignupForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': input_classes, 'placeholder': '••••••••'}))
@@ -51,9 +51,10 @@ class NoteForm(forms.ModelForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['fullname', 'mobile', 'city']
+        fields = ['fullname', 'mobile', 'city', 'profile_photo']
         widgets = {
             'fullname': forms.TextInput(attrs={'class': input_classes}),
             'mobile': forms.TextInput(attrs={'class': input_classes}),
             'city': forms.TextInput(attrs={'class': input_classes}),
+            'profile_photo': forms.FileInput(attrs={'class': input_classes + ' pt-3'}),
         }

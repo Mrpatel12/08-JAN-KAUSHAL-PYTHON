@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex flex-col lg:flex-row w-full min-h-[calc(100vh-4rem)] -mt-16 pt-16">
+    <!-- Admin Sidebar -->
+    <aside class="w-full lg:w-72 bg-white dark:bg-gray-950 border-b lg:border-b-0 lg:border-r border-slate-200/60 dark:border-gray-800 transition-colors duration-500">
+        <div class="p-8">
+            <p class="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-6 ml-2">Administration</p>
+            <nav class="space-y-1.5">
+                <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all {% if request.resolver_match.url_name == 'admin_dashboard' %}bg-blue-600 text-white shadow-lg shadow-blue-600/25{% else %}text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-900 hover:text-blue-600 dark:hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <span class="font-black text-sm">Dashboard</span>
+                </a>
+                <a href="{% url 'admin_user_list' %}" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all {% if 'user' in request.resolver_match.url_name %}bg-blue-600 text-white shadow-lg shadow-blue-600/25{% else %}text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-900 hover:text-blue-600 dark:hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <span class="font-black text-sm">Manage Users</span>
+                </a>
+                <a href="{% url 'admin_note_list' %}" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all {% if 'note' in request.resolver_match.url_name %}bg-blue-600 text-white shadow-lg shadow-blue-600/25{% else %}text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-900 hover:text-blue-600 dark:hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <span class="font-black text-sm">Manage Notes</span>
+                </a>
+            </nav>
+
+            <div class="mt-12 pt-8 border-t border-slate-100 dark:border-gray-800">
+                <p class="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-6 ml-2">Quick Access</p>
+                <div class="space-y-1">
+                    <a href="{% url 'home' %}" class="flex items-center gap-3 px-5 py-3 text-slate-500 hover:text-blue-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        <span class="text-xs font-black uppercase tracking-widest">Back to Site</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow bg-slate-50/50 dark:bg-gray-900/50 p-6 lg:p-12 transition-colors duration-500">
+        <div class="max-w-6xl mx-auto">
+            {% block admin_content %}{% endblock %}
+        </div>
+    </main>
+</div>
+{% endblock %}

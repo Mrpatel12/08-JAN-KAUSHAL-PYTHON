@@ -165,7 +165,7 @@ def send_verification_otp(request):
 @login_required(login_url='login')
 def profile(request):
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=request.user)
+        form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
@@ -174,3 +174,13 @@ def profile(request):
         form = UserUpdateForm(instance=request.user)
     
     return render(request, 'UserApp/profile.html', {'form': form})
+
+@login_required(login_url='login')
+def delete_profile_photo(request):
+    user = request.user
+    if user.profile_photo:
+        user.profile_photo.delete()
+        user.profile_photo = None
+        user.save()
+        messages.success(request, 'Profile photo deleted successfully!')
+    return redirect('profile')
