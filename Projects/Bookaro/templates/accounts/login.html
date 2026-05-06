@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Bookaro{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card glass reveal">
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Sign in to manage your bookings</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Login</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

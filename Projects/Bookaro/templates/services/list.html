@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Explore Services | Bookaro{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 10rem;">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 5rem;">
+            <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Explore Our <span style="color: var(--secondary);">Travel</span> Catalog</h1>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Discover the perfect stay, flight, or complete package for your next adventure.</p>
+        </div>
+
+        <!-- Accommodation Section -->
+        <div style="margin-bottom: 6rem;" class="reveal active">
+            <h2 style="font-size: 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+                🏨 Hotels & Villas
+            </h2>
+            <div class="services-grid">
+                {% for item in accommodations %}
+                <div class="service-card glass">
+                    <div style="height: 200px; overflow: hidden; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                        <img src="{{ item.image_url|default:'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2670&auto=format&fit=crop' }}" 
+                             alt="{{ item.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.8rem; background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 1rem;">{{ item.get_accommodation_type_display }}</span>
+                        <span style="color: var(--accent);">★ {{ item.rating }}</span>
+                    </div>
+                    <h3>{{ item.name }}</h3>
+                    <p style="margin-bottom: 1.5rem;"><i class="location-icon">📍</i> {{ item.location }}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 1.25rem; font-weight: 700; color: var(--secondary);">₹{{ item.price_per_night }}<small style="font-weight: 400; font-size: 0.8rem; color: var(--text-muted);">/night</small></span>
+                        <a href="#" class="btn btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">Book Now</a>
+                    </div>
+                </div>
+                {% empty %}
+                <p style="color: var(--text-muted);">No accommodations available yet. Stay tuned!</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Packages Section -->
+        <div style="margin-bottom: 6rem;" class="reveal">
+            <h2 style="font-size: 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+                🎒 Featured Packages
+            </h2>
+            <div class="services-grid">
+                {% for item in packages %}
+                <div class="service-card glass" style="border-top: 4px solid var(--accent);">
+                    <div style="height: 200px; overflow: hidden; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                        <img src="{{ item.image_url|default:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2673&auto=format&fit=crop' }}" 
+                             alt="{{ item.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-muted);">🕒 {{ item.duration_days }} Days</span>
+                    </div>
+                    <h3>{{ item.name }}</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">{{ item.destinations }}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 1.25rem; font-weight: 700; color: var(--secondary);">${{ item.price }}</span>
+                        <a href="#" class="btn btn-primary" style="background: var(--accent); padding: 0.5rem 1.2rem; font-size: 0.9rem;">Get Deal</a>
+                    </div>
+                </div>
+                {% empty %}
+                <p style="color: var(--text-muted);">No packages available yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Flights Section -->
+        <div class="reveal">
+            <h2 style="font-size: 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+                ✈️ Recent Flight Deals
+            </h2>
+            <!-- Search Form -->
+            <form method="GET" style="margin-bottom: 2.5rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; background: rgba(99, 102, 241, 0.05); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--glass-border);">
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">Origin</label>
+                    <input list="city-suggestions" name="origin" placeholder="Where from?" value="{{ search_origin }}" 
+                           style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--glass-border); border-radius: 0.5rem; background: white; color: var(--text-main); font-family: inherit;" />
+                </div>
+                
+                <div style="display: flex; align-items: center; padding-top: 1.2rem; color: var(--text-muted);">
+                    ➔
+                </div>
+
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">Destination</label>
+                    <input list="city-suggestions" name="destination" placeholder="Where to?" value="{{ search_dest }}" 
+                           style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--glass-border); border-radius: 0.5rem; background: white; color: var(--text-main); font-family: inherit;" />
+                </div>
+
+                <datalist id="city-suggestions">
+                    {% for city in all_cities %}
+                        <option value="{{ city }}"></option>
+                    {% endfor %}
+                </datalist>
+
+                <div style="padding-top: 1.2rem;">
+                    <button type="submit" class="btn btn-primary" style="padding: 0.8rem 2rem;">Search Flights</button>
+                    {% if search_origin or search_dest %}
+                        <a href="{% url 'services_list' %}" style="margin-left: 1rem; color: var(--text-muted); font-size: 0.9rem;">Clear</a>
+                    {% endif %}
+                </div>
+            </form>
+{% comment %}Existing flight table below{% endcomment %}
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--glass-border);">
+                            <th style="padding: 1rem;">Airline</th>
+                            <th style="padding: 1rem;">Route</th>
+                            <th style="padding: 1rem;">Departure</th>
+                            <th style="padding: 1rem;">Price</th>
+                            <th style="padding: 1rem;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in flights %}
+                        <tr style="border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                            <td style="padding: 1.5rem;">
+                                <strong>{{ item.airline }}</strong><br>
+                                <small style="color: var(--text-muted);">{{ item.flight_number }}</small>
+                            </td>
+                            <td style="padding: 1.5rem;">
+                                {{ item.origin }} ➔ {{ item.destination }}
+                            </td>
+                            <td style="padding: 1.5rem;">
+                                {{ item.departure_time|date:"d M, H:i" }}
+                            </td>
+                            <td style="padding: 1.5rem; color: var(--secondary); font-weight: 700;">
+                                ₹{{ item.price }}
+                            </td>
+                            <td style="padding: 1.5rem;">
+<a href="{% url 'flight_payment' %}?flight_id={{ item.id }}" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem;">Select</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">No flights listed at the moment.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

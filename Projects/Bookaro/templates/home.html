@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div class="hero-content fade-in">
+                <h1>Your Global Travel <span style="background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Partner.</span></h1>
+                <p>Explore the world with Bookaro. From exotic luxury villas to quick business flights, we bring all your travel needs into one seamless experience.</p>
+                <div class="hero-btns">
+                    <a href="{% url 'services_list' %}" class="btn btn-primary">Start Booking</a>
+                    <a href="{% url 'services_list' %}" class="btn btn-outline">Explore Services</a>
+                </div>
+            </div>
+            <div class="hero-image fade-in" style="animation-delay: 0.2s;">
+                <!-- Fallback to a professional image since generation failed -->
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2670&auto=format&fit=crop" alt="Beautiful Mountain Lake">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="section stats-section reveal">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h2>10k+</h2>
+                <p>Active Users</p>
+            </div>
+            <div class="stat-item">
+                <h2>50k+</h2>
+                <p>Successful Bookings</p>
+            </div>
+            <div class="stat-item">
+                <h2>4.9/5</h2>
+                <p>User Rating</p>
+            </div>
+            <div class="stat-item">
+                <h2>24/7</h2>
+                <p>Expert Support</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="section reveal" id="services">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Our <span style="color: var(--primary);">Featured</span> Services</h2>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Choose from a wide range of professional categories tailored to your needs.</p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card glass">
+                <div class="icon-box">🎒</div>
+                <h3>Travel Packages</h3>
+                <p>All-inclusive curated deals for your next dream vacation.</p>
+            </div>
+            <div class="service-card glass">
+                <div class="icon-box">✈️</div>
+                <h3>Flights</h3>
+                <p>Book domestic and international flights at the best rates.</p>
+            </div>
+            <div class="service-card glass">
+                <div class="icon-box">🏨</div>
+                <h3>Hotels</h3>
+                <p>Premium stay options in top destinations worldwide.</p>
+            </div>
+            <div class="service-card glass">
+                <div class="icon-box">🏡</div>
+                <h3>Homestays</h3>
+                <p>Authentic local experiences with comfortable home environments.</p>
+            </div>
+            <div class="service-card glass">
+                <div class="icon-box">🏝️</div>
+                <h3>Luxury Villas</h3>
+                <p>Exclusive private villas for a perfect getaway with family or friends.</p>
+            </div>
+            <div class="service-card glass">
+                <div class="icon-box">💼</div>
+                <h3>Corporate Travel</h3>
+                <p>Tailored booking solutions for business professionals and teams.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section reveal">
+    <div class="container">
+        <div class="glass" style="padding: 5rem; text-align: center; background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(14, 165, 233, 0.08)); border: 1px solid rgba(99, 102, 241, 0.1);">
+            <h2 style="font-size: 3rem; margin-bottom: 1.5rem;">Ready to simplify your <br> life with Bookaro?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 3rem; font-size: 1.2rem;">Join thousands of users who trust us for their daily bookings.</p>
+            <a href="#" class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.1rem;">Get Started for Free</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

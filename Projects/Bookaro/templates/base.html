@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bookaro | Seamless Bookings{% endblock %}</title>
+    <meta name="description" content="Bookaro - The professional platform for all your booking and service needs.">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=2.0">
+    
+    <!-- Favicon placeholder -->
+    <link rel="icon" type="image/x-icon" href="https://via.placeholder.com/32">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-content">
+            <a href="/" class="logo">BOOKARO</a>
+            
+            <ul class="nav-links" id="nav-links">
+                <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+                <li><a href="{% url 'services_list' %}" class="{% if request.resolver_match.url_name == 'services_list' %}active{% endif %}">Services</a></li>
+                <li><a href="#" class="">About</a></li>
+                <li><a href="{% url 'contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a></li>
+            </ul>
+            
+            <div class="nav-btns" style="display: flex; align-items: center;">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'edit_profile' %}" style="display: flex; align-items: center; margin-right: 1.5rem; color: rgba(255, 255, 255, 0.8); font-size: 0.95rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255, 255, 255, 0.8)'">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 0.5rem; border: 2px solid rgba(255,255,255,0.2);">
+                        {% else %}
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); margin-right: 0.5rem; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.2);">👤</div>
+                        {% endif %}
+                        Hello, <strong style="color: #fff; margin-left: 0.25rem;">{{ user.username }}</strong>
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-outline" style="border-color: rgba(255, 255, 255, 0.2); color: #fff;">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline" style="margin-right: 1rem; border-color: rgba(255, 255, 255, 0.2); color: #fff;">Login</a>
+                    <a href="{% url 'signup' %}" class="btn btn-primary">Join Now</a>
+                {% endif %}
+            </div>
+
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        <script>
+            // Auto-hide messages after 5 seconds
+            setTimeout(() => {
+                document.querySelectorAll('.message').forEach(m => m.style.display = 'none');
+            }, 5000);
+        </script>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo footer-logo">BOOKARO</div>
+                    <p style="color: var(--text-muted);">Empowering professionals and businesses with state-of-the-art booking solutions. Built for the modern web.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Platform</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">How it works</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Bookaro Inc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.getElementById('nav-links');
+        
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Scroll Reveal Animation
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', reveal);
+        reveal(); // Run on load
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

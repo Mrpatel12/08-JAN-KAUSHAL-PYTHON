@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Flight Payment | Bookaro{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 8rem;">
+    <div class="container" style="max-width: 800px; margin: 0 auto;">
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; text-align: center;">Complete Your Booking</h2>
+        <div class="glass" style="padding: 2rem; border-radius: 0.8rem;">
+            <h3 style="margin-bottom: 0.5rem;">{{ flight.airline }} – {{ flight.flight_number }}</h3>
+            <p style="margin-bottom: 0.3rem;"><strong>Route:</strong> {{ flight.origin }} ➔ {{ flight.destination }}</p>
+            <p style="margin-bottom: 0.3rem;"><strong>Departure:</strong> {{ flight.departure_time|date:"d M, H:i" }}</p>
+            <p style="margin-bottom: 1rem; font-size: 1.2rem; color: var(--secondary);"><strong>Price:</strong> ₹{{ flight.price }}</p>
+            <form method="POST" action="{% url 'flight_payment' %}">
+                {% csrf_token %}
+                <input type="hidden" name="flight_id" value="{{ flight.id }}" />
+                <h4 style="margin-bottom: 0.5rem;">Choose a payment method</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                    {% for method in payment_methods %}
+                    <label style="flex: 1 1 45%; background: var(--bg-card); padding: 0.6rem; border: 1px solid var(--glass-border); border-radius: 0.5rem; cursor: pointer; display: flex; align-items: center;">
+                        <i class="{{ method.icon }}" style="margin-right: 0.5rem; color: var(--primary);"></i>
+                        {{ method.name }}
+                        <input type="radio" name="payment_method" value="{{ method.name }}" required style="margin-left:auto;">
+                    </label>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem 1rem; font-size: 1rem;">Pay ₹{{ flight.price }}</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us | Bookaro{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 10rem;">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 5rem;" class="reveal active">
+            <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Get in <span style="color: var(--secondary);">Touch</span></h1>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Have questions about our travel packages or need help with a booking? Our team is here for you 24/7.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: start;">
+            <!-- Contact Info -->
+            <div class="reveal active">
+                <div class="glass" style="padding: 2.5rem; margin-bottom: 2rem;">
+                    <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 2rem;">
+                        <div class="icon-box" style="margin: 0;">📍</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.2rem;">Our Location</h4>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">123 Travel Plaza, Adventure City, NY 10001</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 2rem;">
+                        <div class="icon-box" style="margin: 0;">📧</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.2rem;">Email Us</h4>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">support@bookaro.com</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1.5rem; align-items: center;">
+                        <div class="icon-box" style="margin: 0;">📞</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.2rem;">Call Us</h4>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">+1 (555) 000-BOOK</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass" style="padding: 2.5rem;">
+                    <h4 style="margin-bottom: 1rem;">Follow Our Journey</h4>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#" class="icon-box" style="margin: 0; width: 45px; height: 45px;">FB</a>
+                        <a href="#" class="icon-box" style="margin: 0; width: 45px; height: 45px;">IG</a>
+                        <a href="#" class="icon-box" style="margin: 0; width: 45px; height: 45px;">TW</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="glass reveal active" style="padding: 4rem;">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="first_name" placeholder="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="last_name" placeholder="Doe" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" name="subject" placeholder="How can we help?" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea name="message" style="width: 100%; padding: 1rem; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); border-radius: 0.5rem; color: var(--text-main); font-family: inherit; min-height: 150px; outline: none; transition: var(--transition);" placeholder="Tell us more about your inquiry..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 1.2rem;">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
