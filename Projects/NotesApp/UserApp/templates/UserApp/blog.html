@@ -2,7 +2,83 @@
 {% load static %}
 
 {% block content %}
-<div class="w-full">
+<div class="w-full" x-data="{ 
+    activeCategory: 'All', 
+    postsShown: 3, 
+    showToast: false,
+    toastMsg: '',
+    selectedPost: null,
+    categories: ['All', 'Product', 'Productivity', 'Team'],
+    posts: [
+        { id: 1, category: 'Product', title: 'Introducing Email-based OTP Verification', date: 'April 27, 2026', img: '{% static 'images/blog1.png' %}', desc: 'Security is our top priority. Learn how our new 2FA system keeps your data safe.', content: 'Detailed content for OTP verification... This is where the full article would go. We use modern encryption and SMTP protocols to ensure your data is always protected.' },
+        { id: 2, category: 'Productivity', title: 'How to Organize Your Thoughts Effectively', date: 'April 20, 2026', img: '{% static 'images/blog2.png' %}', desc: 'A cluttered mind leads to cluttered notes. We break down the best strategies.', content: 'Full guide on organization... Using the Zettelkasten method combined with modern digital tools like NotesApp can drastically improve your creative output.' },
+        { id: 3, category: 'Team', title: 'Behind the Scenes: Redesigning NotesApp', date: 'April 15, 2026', img: '{% static 'images/team.png' %}', desc: 'A deep dive into our design process and how we used Tailwind CSS.', content: 'Design philosophy... We chose Tailwind for its utility-first approach which allowed us to iterate quickly on our premium glassmorphism aesthetic.' },
+        { id: 4, category: 'Product', title: 'Mobile Optimization: Performance First', date: 'April 10, 2026', img: '{% static 'images/mockup_mobile.png' %}', desc: 'How we achieved 60FPS on older devices while maintaining rich animations.', content: 'Technical breakdown... By leveraging hardware acceleration and minimizing layout thrashing, we ensured the app feels buttery smooth on any device.' },
+        { id: 5, category: 'Productivity', title: 'The Power of Daily Journaling', date: 'April 05, 2026', img: '{% static 'images/mockup_writing.png' %}', desc: 'Unlock your creativity by spending just 10 minutes a day writing.', content: 'Journaling tips... Daily writing is the most effective way to clear mental fog. Start small, write for just 10 minutes every morning, and watch your productivity soar.' }
+    ],
+    triggerToast(msg) {
+        this.toastMsg = msg;
+        this.showToast = true;
+        setTimeout(() => this.showToast = false, 3000);
+    }
+}">
+    <!-- Full-Screen Article Modal -->
+    <div x-show="selectedPost" 
+         class="fixed inset-0 z-[100] overflow-y-auto bg-white dark:bg-gray-950"
+         x-transition:enter="transition ease-out duration-500"
+         x-transition:enter-start="opacity-0 translate-y-full"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-500"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 translate-y-full"
+         @keydown.escape.window="selectedPost = null">
+        
+        <!-- Modal Navbar -->
+        <div class="sticky top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-b border-gray-100 dark:border-gray-900 px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-black uppercase tracking-widest text-blue-600" x-text="selectedPost?.category"></span>
+                <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                <span class="text-xs font-bold text-gray-500" x-text="selectedPost?.date"></span>
+            </div>
+            <button @click="selectedPost = null" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                <svg class="w-6 h-6 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Article Content -->
+        <div class="max-w-4xl mx-auto py-20 px-6">
+            <img :src="selectedPost?.img" class="w-full aspect-video object-cover rounded-[3rem] shadow-2xl mb-12">
+            <h1 class="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-8 leading-tight" x-text="selectedPost?.title"></h1>
+            <div class="prose prose-xl dark:prose-invert max-w-none">
+                <p class="text-xl text-gray-600 dark:text-gray-400 mb-6 leading-relaxed" x-text="selectedPost?.desc"></p>
+                <div class="h-1 w-20 bg-blue-600 mb-8 rounded-full"></div>
+                <p class="text-2xl font-medium text-gray-800 dark:text-gray-200 leading-relaxed" x-text="selectedPost?.content"></p>
+                
+                <!-- Mock text to make it scrollable -->
+                <p class="mt-12 text-gray-500 leading-relaxed">
+                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                </p>
+                <p class="mt-8 text-gray-500 leading-relaxed">
+                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+                </p>
+            </div>
+            
+            <!-- Author Footer -->
+            <div class="mt-20 pt-10 border-t border-gray-100 dark:border-gray-900 flex items-center gap-4">
+                <img src="{% static 'images/user1.png' %}" class="w-14 h-14 rounded-full object-cover">
+                <div>
+                    <p class="text-lg font-black text-gray-900 dark:text-white">Alex Rivera</p>
+                    <p class="text-sm text-gray-500">Lead Designer at NotesApp</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div x-show="showToast" ...>
+        ...
+    </div>
+
     <!-- Blog Hero Section -->
     <section class="py-16 md:py-24">
         <div class="max-w-7xl mx-auto px-4">
@@ -31,7 +107,7 @@
                             The Future of Note-Taking: AI, Sync, and Speed.
                         </h2>
                         <p class="text-gray-600 dark:text-gray-400 text-lg mb-8 leading-relaxed">
-                            Discover how we're integrating machine learning to help you organize your thoughts automatically, and why speed is the most important feature of 2026.
+                            Discover how we're integrating machine learning to help you organize your thoughts automatically, and why speed is the most important feature.
                         </p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
@@ -41,10 +117,10 @@
                                     <p class="text-xs text-gray-500">April 28, 2026</p>
                                 </div>
                             </div>
-                            <a href="#" class="flex items-center gap-2 text-blue-600 font-bold hover:gap-3 transition-all">
+                            <button @click="selectedPost = { title: 'The Future of Note-Taking', category: 'Featured', date: 'April 28, 2026', img: '{% static 'images/mockup.png' %}', desc: 'AI and Sync.', content: 'Full content coming soon...' }" class="flex items-center gap-2 text-blue-600 font-bold hover:gap-3 transition-all">
                                 Read Article
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -53,89 +129,54 @@
     </section>
 
     <!-- Latest Posts Grid -->
-    <section class="py-16 bg-gray-50 dark:bg-gray-900/50">
+    <section class="py-16 bg-gray-50 dark:bg-gray-900/50 min-h-[800px]">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-end mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Latest Articles</h2>
-                <div class="flex gap-2">
-                    <button class="px-4 py-2 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-bold shadow-sm border border-gray-200 dark:border-gray-700">All</button>
-                    <button class="px-4 py-2 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white font-bold transition-colors">Product</button>
-                    <button class="px-4 py-2 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white font-bold transition-colors">Tips</button>
+                <div class="flex flex-wrap gap-2">
+                    <template x-for="cat in categories">
+                        <button @click="activeCategory = cat; postsShown = 3" 
+                                :class="activeCategory === cat ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25' : 'bg-white dark:bg-gray-800 text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-gray-700'"
+                                class="px-6 py-2.5 rounded-xl font-bold transition-all"
+                                x-text="cat"></button>
+                    </template>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Post 1 -->
-                <article class="group bg-white dark:bg-gray-950 rounded-3xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800 transition-all hover:-translate-y-2 hover:shadow-2xl">
-                    <div class="h-56 relative overflow-hidden">
-                        <img src="{% static 'images/blog1.png' %}" alt="2FA" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        <div class="absolute top-4 left-4">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-white/90 backdrop-blur text-blue-600 uppercase tracking-tighter">Product</span>
+                <template x-for="(post, index) in posts.filter(p => activeCategory === 'All' || p.category === activeCategory).slice(0, postsShown)" :key="post.id">
+                    <article class="group bg-white dark:bg-gray-950 rounded-3xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800 transition-all hover:-translate-y-2 hover:shadow-2xl"
+                             x-transition:enter="transition ease-out duration-500"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100">
+                        <div class="h-56 relative overflow-hidden">
+                            <img :src="post.img" :alt="post.title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute top-4 left-4">
+                                <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-white/90 backdrop-blur text-blue-600 uppercase tracking-tighter" x-text="post.category"></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                            Introducing Email-based OTP Verification
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-3">
-                            Security is our top priority. Learn how our new 2FA system keeps your data safe from unauthorized access.
-                        </p>
-                        <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-800">
-                            <span class="text-xs text-gray-500">April 27, 2026</span>
-                            <a href="#" class="text-blue-600 dark:text-blue-400 font-bold text-sm">Read more</a>
+                        <div class="p-8">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" x-text="post.title"></h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-3" x-text="post.desc"></p>
+                            <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-800">
+                                <span class="text-xs text-gray-500" x-text="post.date"></span>
+                                <button @click="selectedPost = post" class="text-blue-600 dark:text-blue-400 font-bold text-sm">Read more</button>
+                            </div>
                         </div>
-                    </div>
-                </article>
-
-                <!-- Post 2 -->
-                <article class="group bg-white dark:bg-gray-950 rounded-3xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800 transition-all hover:-translate-y-2 hover:shadow-2xl">
-                    <div class="h-56 relative overflow-hidden">
-                        <img src="{% static 'images/blog2.png' %}" alt="Organization" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        <div class="absolute top-4 left-4">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-white/90 backdrop-blur text-emerald-600 uppercase tracking-tighter">Productivity</span>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                            How to Organize Your Thoughts Effectively
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-3">
-                            A cluttered mind leads to cluttered notes. We break down the best strategies for digital organization and brainstorming.
-                        </p>
-                        <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-800">
-                            <span class="text-xs text-gray-500">April 20, 2026</span>
-                            <a href="#" class="text-emerald-600 dark:text-emerald-400 font-bold text-sm">Read more</a>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Post 3 -->
-                <article class="group bg-white dark:bg-gray-950 rounded-3xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800 transition-all hover:-translate-y-2 hover:shadow-2xl">
-                    <div class="h-56 relative overflow-hidden">
-                        <img src="{% static 'images/team.png' %}" alt="Team" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        <div class="absolute top-4 left-4">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-white/90 backdrop-blur text-purple-600 uppercase tracking-tighter">Team</span>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                            Behind the Scenes: Redesigning NotesApp
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-3">
-                            A deep dive into our design process and how we used Tailwind CSS to create a premium dark-mode aesthetic for our users.
-                        </p>
-                        <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-800">
-                            <span class="text-xs text-gray-500">April 15, 2026</span>
-                            <a href="#" class="text-purple-600 dark:text-purple-400 font-bold text-sm">Read more</a>
-                        </div>
-                    </div>
-                </article>
+                    </article>
+                </template>
             </div>
+            ...
+        </div>
+    </section>
+    ...
+</div>
 
             <!-- Load More -->
-            <div class="mt-16 text-center">
-                <button class="px-12 py-4 rounded-2xl font-bold text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-800 hover:bg-white dark:hover:bg-gray-800 transition-all shadow-sm">
-                    Load More Articles
+            <div class="mt-16 text-center" x-show="postsShown < posts.filter(p => activeCategory === 'All' || p.category === activeCategory).length">
+                <button @click="postsShown += 3" class="px-12 py-4 rounded-2xl font-bold text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-800 hover:bg-white dark:hover:bg-gray-800 transition-all shadow-sm flex items-center gap-2 mx-auto">
+                    <span>Load More Articles</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
             </div>
         </div>
@@ -153,11 +194,18 @@
                         </p>
                     </div>
                     <div>
-                        <form class="flex flex-col sm:flex-row gap-4">
-                            <input type="email" placeholder="Enter your email" class="flex-grow bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-white/50 transition-all">
-                            <button type="submit" class="bg-white text-gray-900 dark:text-blue-600 px-8 py-4 rounded-2xl font-extrabold hover:bg-gray-100 transition-all shadow-xl">Subscribe Now</button>
-                        </form>
-                        <p class="text-xs text-gray-500 dark:text-blue-200 mt-4 text-center sm:text-left">No spam, just quality content. Unsubscribe at any time.</p>
+                        {% if user.is_authenticated %}
+                            <form class="flex flex-col sm:flex-row gap-4" @submit.prevent="triggerToast('Subscribed successfully!')">
+                                <input type="email" value="{{ user.email }}" readonly class="flex-grow bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white placeholder:text-gray-400 outline-none cursor-not-allowed">
+                                <button type="submit" class="bg-white text-gray-900 dark:text-blue-600 px-8 py-4 rounded-2xl font-extrabold hover:bg-gray-100 transition-all shadow-xl">Subscribe Now</button>
+                            </form>
+                            <p class="text-xs text-gray-500 dark:text-blue-200 mt-4 text-center sm:text-left">No spam, just quality content. Unsubscribe at any time.</p>
+                        {% else %}
+                            <div class="flex flex-col sm:flex-row gap-4 items-center">
+                                <p class="text-blue-100 font-bold">Log in to join our community.</p>
+                                <a href="{% url 'login' %}" class="bg-white text-gray-900 dark:text-blue-600 px-8 py-4 rounded-2xl font-extrabold hover:bg-gray-100 transition-all shadow-xl">Login to Subscribe</a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <!-- Decorations -->

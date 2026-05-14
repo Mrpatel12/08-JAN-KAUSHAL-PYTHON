@@ -7,6 +7,8 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=50)
     is_verified = models.BooleanField(default=False)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
+    is_premium = models.BooleanField(default=False)
+    stripe_customer_id = models.CharField(max_length=255, null=True, blank=True)
 
 class OTP(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

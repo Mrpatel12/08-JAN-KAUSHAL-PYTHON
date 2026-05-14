@@ -103,6 +103,13 @@ def dashboard(request):
 # Create Note
 @login_required(login_url='login')
 def create_note(request):
+    # Check for premium limit
+    if not request.user.is_premium:
+        note_count = Note.objects.filter(user=request.user).count()
+        if note_count >= 10:
+            messages.warning(request, 'You have reached the limit for free accounts (10 notes). Please upgrade to Premium for unlimited notes!')
+            return redirect('pricing')
+
     if request.method == 'POST':
         form = NoteForm(request.POST)
         if form.is_valid():

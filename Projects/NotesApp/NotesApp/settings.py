@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-phu1o^!q9ej_4denk&c1extua&mzwto4$8uk6o96r-dv$+3y56'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'UserApp',
     'AdminApp',
+    'PaymentsApp',
 ]
 
 MIDDLEWARE = [
@@ -116,9 +117,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -141,3 +142,12 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'kpkaushal162@gmail.com'
 EMAIL_HOST_PASSWORD = 'lncf zzoj adkj zhsp'
+
+# Stripe Configuration
+STRIPE_PUBLIC_KEY = 'pk_test_your_public_key'
+STRIPE_SECRET_KEY = 'sk_test_your_secret_key'
+STRIPE_WEBHOOK_SECRET = 'whsec_your_webhook_secret'
+
+# Change these to your actual domain in production
+SITE_URL = 'https://notesapp1284.pythonanywhere.com'
+STATIC_ROOT = BASE_DIR / 'staticfiles'

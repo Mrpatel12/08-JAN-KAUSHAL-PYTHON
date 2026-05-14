@@ -7,4 +7,5 @@ urlpatterns = [
     path('admin-panel/', include('AdminApp.urls')),
     path('admin/', admin.site.urls),
     path('', include('UserApp.urls')),
+    path('payments/', include('PaymentsApp.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
