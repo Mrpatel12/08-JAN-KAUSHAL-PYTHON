@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Join Bookaro | Your Journey Starts Here{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card fade-in-up">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <a href="/" class="logo" style="font-size: 2rem; margin-bottom: 1rem; display: inline-block;">BOOKARO</a>
+            <h2 style="margin-bottom: 0.5rem;">Create Your Account</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Join thousands of professional travelers today</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-control">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <p style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem;">{{ field.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.85rem;">
+                Create Account
+                <i class="fa-solid fa-user-plus"></i>
+            </button>
+        </form>
+
+        <div style="margin-top: 2.5rem; text-align: center; font-size: 0.9rem; color: var(--text-muted);">
+            <p>Already have an account? <a href="{% url 'login' %}" style="color: var(--primary); font-weight: 700;">Sign in here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

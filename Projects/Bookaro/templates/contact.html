@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact Us | Bookaro - Support Excellence{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 10rem; background: var(--bg-body); min-height: 100vh;">
+    <div class="container">
+        <div class="reveal" style="text-align: center; max-width: 700px; margin: 0 auto 5rem;">
+            <h1 style="margin-bottom: 1.5rem;">Let's Start a Conversation</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Whether you have a question about our services, need technical support, or just want to say hello, our team is here for you.</p>
+        </div>
+
+        <div class="reveal" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 0; background: var(--bg-card); border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-xl); border: 1px solid var(--border);">
+            <!-- Sidebar (Always Dark for Premium Look) -->
+            <div style="background: #0f172a; color: white; padding: 4rem; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h2 style="color: white; margin-bottom: 2rem;">Contact Information</h2>
+                    <p style="color: #94a3b8; margin-bottom: 3rem; font-size: 1rem; line-height: 1.6;">Reach out to us through any of these channels. We aim to respond within 24 hours.</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1.5rem;">
+                            <div style="width: 48px; height: 48px; background: rgba(79, 70, 229, 0.2); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #818cf8; font-size: 1.25rem;">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 0.25rem; font-weight: 700;">Call Us</p>
+                                <p style="font-weight: 600; font-size: 1.1rem;">+91 96246 71929</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1.5rem;">
+                            <div style="width: 48px; height: 48px; background: rgba(14, 165, 233, 0.2); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #38bdf8; font-size: 1.25rem;">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 0.25rem; font-weight: 700;">Email Us</p>
+                                <p style="font-weight: 600; font-size: 1.1rem;">mrpatel67989@gmail.com</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1.5rem;">
+                            <div style="width: 48px; height: 48px; background: rgba(245, 158, 11, 0.2); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #fbbf24; font-size: 1.25rem;">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 0.25rem; font-weight: 700;">Our Office</p>
+                                <p style="font-weight: 600; font-size: 1.1rem;">Jamnagar, Gujarat, India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 4rem;">
+                    <p style="color: #64748b; margin-bottom: 1.5rem; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Follow our journey</p>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#" class="btn btn-dark" style="width: 40px; height: 40px; padding: 0; border-radius: 50%; background: #1e293b; color: white;"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="btn btn-dark" style="width: 40px; height: 40px; padding: 0; border-radius: 50%; background: #1e293b; color: white;"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="btn btn-dark" style="width: 40px; height: 40px; padding: 0; border-radius: 50%; background: #1e293b; color: white;"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="btn btn-dark" style="width: 40px; height: 40px; padding: 0; border-radius: 50%; background: #1e293b; color: white;"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div style="padding: 4rem;">
+                <form method="POST" style="display: flex; flex-direction: column; gap: 2rem;">
+                    {% csrf_token %}
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem; color: var(--text-main);">Send a Message</h3>
+                        <p style="color: var(--text-muted); font-size: 1rem;">Fill out the form below and we'll get back to you shortly.</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-control" style="margin-bottom: 0;">
+                            <label for="id_first_name">First Name</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="form-control" style="margin-bottom: 0;">
+                            <label for="id_last_name">Last Name</label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-control" style="margin-bottom: 0;">
+                            <label for="id_email">Email Address</label>
+                            {{ form.email }}
+                        </div>
+                        <div class="form-control" style="margin-bottom: 0;">
+                            <label for="id_subject">Subject</label>
+                            {{ form.subject }}
+                        </div>
+                    </div>
+
+                    <div class="form-control" style="margin-bottom: 0;">
+                        <label for="id_message">Your Message</label>
+                        {{ form.message }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.25rem; font-size: 1.1rem; border-radius: var(--radius-lg);">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        Send Message
+                    </button>
+                    
+                    {% if form.errors %}
+                        <div style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 1rem; border-radius: var(--radius-md); font-size: 0.85rem; border: 1px solid rgba(239, 68, 68, 0.2);">
+                            Please correct the errors above and try again.
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Ensure form fields match the new design system */
+    form input, form textarea, form select {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        font-family: inherit;
+        font-size: 1rem;
+        transition: var(--transition);
+        background: var(--bg-card);
+        color: var(--text-main);
+    }
+    form input:focus, form textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        background: var(--bg-card);
+    }
+    form textarea {
+        min-height: 160px;
+        resize: vertical;
+    }
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.6rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        opacity: 0.85;
+    }
+</style>
+{% endblock %}

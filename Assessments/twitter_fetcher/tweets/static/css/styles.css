@@ -1,0 +1,1385 @@
+/* ==========================================================================
+   CSS Design Tokens & Theme Variables
+   ========================================================================== */
+:root {
+    --font-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-normal: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* Branding Colors */
+    --color-twitter-blue: #1d9bf0;
+    --color-twitter-blue-hover: #1a8cd8;
+    --color-twitter-blue-rgb: 29, 155, 240;
+    
+    --color-like-pink: #f91880;
+    --color-retweet-green: #00ba7c;
+    --color-warning-gold: #eab308;
+    --color-danger-red: #ef4444;
+}
+
+/* 1. Dim Theme (Default - Slate/Midnight Blue) */
+body.dim-theme {
+    --bg-app: #15202b;
+    --bg-surface: #192734;
+    --bg-surface-hover: #22303c;
+    --border-color: #38444d;
+    --text-primary: #f7f9f9;
+    --text-secondary: #8899a6;
+    --bg-search: #202e3a;
+    --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    --banner-bg: linear-gradient(135deg, #1e3a8a 0%, #1d9bf0 100%);
+}
+
+/* 2. Lights Out Theme (Pure Black) */
+body.dark-theme {
+    --bg-app: #000000;
+    --bg-surface: #151822;
+    --bg-surface-hover: #1c1f2e;
+    --border-color: #2f3336;
+    --text-primary: #e7e9ea;
+    --text-secondary: #71767b;
+    --bg-search: #202327;
+    --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    --banner-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* 3. Light Theme */
+body.light-theme {
+    --bg-app: #f7f9f9;
+    --bg-surface: #ffffff;
+    --bg-surface-hover: #f7f7f7;
+    --border-color: #eff3f4;
+    --text-primary: #0f1419;
+    --text-secondary: #536471;
+    --bg-search: #eeeef0;
+    --card-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+    --banner-bg: linear-gradient(135deg, #cbd5e1 0%, #38bdf8 100%);
+}
+
+/* ==========================================================================
+   Base Elements Reset & Typography
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    line-height: 1.5;
+    transition: background-color var(--transition-normal), color var(--transition-normal);
+    overflow-y: scroll;
+}
+
+input, button, textarea {
+    font-family: inherit;
+}
+
+/* Custom Thin Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-app);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* ==========================================================================
+   Layout Containers
+   ========================================================================== */
+.app-container {
+    display: grid;
+    grid-template-columns: 275px 1fr 350px;
+    min-height: 100vh;
+    max-width: 1350px;
+    margin: 0 auto;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+}
+
+/* ==========================================================================
+   Sidebar Component
+   ========================================================================== */
+.sidebar {
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid var(--border-color);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-left: 12px;
+    margin-bottom: 32px;
+}
+
+.logo-x {
+    width: 32px;
+    height: 32px;
+    color: var(--text-primary);
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 9999px;
+    transition: background-color var(--transition-fast);
+}
+
+.nav-item i {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-item:hover, .nav-item.active {
+    background-color: var(--bg-surface-hover);
+}
+
+.nav-item.active {
+    color: var(--color-twitter-blue);
+}
+
+/* History Section inside Sidebar */
+.sidebar-section {
+    margin-top: 32px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 0 12px;
+}
+
+.section-title i {
+    width: 16px;
+    height: 16px;
+}
+
+.history-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.history-item:hover {
+    background-color: var(--bg-surface-hover);
+}
+
+.history-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.history-link i {
+    width: 14px;
+    height: 14px;
+    color: var(--text-secondary);
+}
+
+.history-remove-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.history-remove-btn:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-danger-red);
+}
+
+.history-empty {
+    padding: 12px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.clear-history-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    width: fit-content;
+    align-self: center;
+    margin-top: auto;
+    transition: all var(--transition-fast);
+}
+
+.clear-history-btn:hover {
+    background-color: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: var(--color-danger-red);
+}
+
+/* Sidebar Footer (Theme buttons) */
+.theme-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background-color: var(--bg-search);
+    border-radius: 24px;
+    padding: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.theme-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.theme-btn i {
+    width: 18px;
+    height: 18px;
+}
+
+.theme-btn:hover {
+    color: var(--text-primary);
+}
+
+.theme-btn.active {
+    background-color: var(--bg-surface);
+    color: var(--color-twitter-blue);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================================
+   Main Feed Panel
+   ========================================================================== */
+.main-content {
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header {
+    position: sticky;
+    top: 0;
+    background-color: rgba(21, 32, 43, 0.85); /* fallback */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 10;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Theme updates to header background for transparency */
+body.dim-theme .main-header { background-color: rgba(21, 32, 43, 0.85); }
+body.dark-theme .main-header { background-color: rgba(0, 0, 0, 0.85); }
+body.light-theme .main-header { background-color: rgba(247, 249, 249, 0.85); }
+
+.header-title h2 {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.header-title .subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Search Bar styling */
+.search-form {
+    width: 100%;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-search);
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    padding: 6px 6px 6px 16px;
+    transition: all var(--transition-fast);
+}
+
+.search-input-wrapper:focus-within {
+    border-color: var(--color-twitter-blue);
+    background-color: var(--bg-surface);
+    box-shadow: 0 0 0 1px var(--color-twitter-blue);
+}
+
+.search-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--text-secondary);
+    margin-right: 12px;
+}
+
+.search-input-wrapper input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 15px;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.search-input-wrapper input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-submit-btn {
+    background-color: var(--text-primary);
+    color: var(--bg-app);
+    border: none;
+    border-radius: 9999px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.search-submit-btn:hover {
+    opacity: 0.9;
+}
+
+/* Spinner inside button */
+.loader-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--bg-app);
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Toasts & Status Banners
+   ========================================================================== */
+.status-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    font-size: 13.5px;
+    border-bottom: 1px solid var(--border-color);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.status-banner.banner-mock {
+    background-color: rgba(234, 179, 8, 0.08);
+    border-bottom: 1px solid rgba(234, 179, 8, 0.2);
+    color: var(--color-warning-gold);
+}
+
+.status-banner.banner-live {
+    background-color: rgba(0, 186, 124, 0.08);
+    border-bottom: 1px solid rgba(0, 186, 124, 0.2);
+    color: var(--color-retweet-green);
+}
+
+.banner-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 16px;
+}
+
+.banner-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.banner-close-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+    opacity: 0.6;
+    transition: opacity var(--transition-fast);
+}
+
+.banner-close-btn:hover {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   Profile Card Section
+   ========================================================================== */
+.profile-card {
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.profile-banner {
+    height: 150px;
+    background: var(--banner-bg);
+    position: relative;
+    width: 100%;
+}
+
+.profile-meta-container {
+    padding: 0 24px 20px 24px;
+    margin-top: -60px;
+    position: relative;
+}
+
+.avatar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 12px;
+}
+
+.profile-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid var(--bg-surface);
+    background-color: var(--bg-app);
+    object-fit: cover;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.badge {
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.badge-mock {
+    background-color: rgba(234, 179, 8, 0.15);
+    color: var(--color-warning-gold);
+    border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.badge-live {
+    background-color: rgba(0, 186, 124, 0.15);
+    color: var(--color-retweet-green);
+    border: 1px solid rgba(0, 186, 124, 0.3);
+}
+
+.profile-identity {
+    margin-bottom: 12px;
+}
+
+.name-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.name-container h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.verified-icon {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-twitter-blue);
+    color: #ffffff; /* inner tick color */
+}
+
+/* Verified icon tick handling */
+body.light-theme .verified-icon {
+    color: #ffffff;
+}
+
+.handle-container {
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+.profile-bio {
+    font-size: 15px;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+.profile-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 14.5px;
+}
+
+.stat-item {
+    color: var(--text-secondary);
+}
+
+.stat-item strong {
+    color: var(--text-primary);
+    margin-right: 4px;
+}
+
+/* ==========================================================================
+   Tweets Feed List
+   ========================================================================== */
+.tweets-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Individual Tweet Card */
+.tweet-card {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 12px;
+    background-color: var(--bg-surface);
+    transition: background-color var(--transition-fast);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tweet-card:hover {
+    background-color: var(--bg-surface-hover);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tweet-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--bg-app);
+    flex-shrink: 0;
+}
+
+.tweet-main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.tweet-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.tweet-author-name {
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.tweet-author-name:hover {
+    text-decoration: underline;
+}
+
+.tweet-verified-badge {
+    width: 16px;
+    height: 16px;
+    fill: var(--color-twitter-blue);
+    color: var(--bg-surface);
+}
+
+.tweet-handle {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.tweet-dot {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 0 2px;
+}
+
+.tweet-time {
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.tweet-time:hover {
+    text-decoration: underline;
+}
+
+.tweet-body {
+    font-size: 15px;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+/* Highlighting inside Tweet text (Links, hashtags, handles) */
+.tweet-body a, 
+.tweet-body .tweet-hashtag, 
+.tweet-body .tweet-mention {
+    color: var(--color-twitter-blue);
+    text-decoration: none;
+}
+
+.tweet-body a:hover, 
+.tweet-body .tweet-hashtag:hover, 
+.tweet-body .tweet-mention:hover {
+    text-decoration: underline;
+}
+
+/* Interaction Icons and Metrics */
+.tweet-footer {
+    display: flex;
+    justify-content: space-between;
+    max-width: 425px;
+    margin-top: 4px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    padding: 6px;
+    border-radius: 9999px;
+    margin-left: -6px;
+}
+
+.action-btn i {
+    width: 17px;
+    height: 17px;
+    transition: transform var(--transition-fast);
+}
+
+/* Individual Icon Hover States */
+/* Reply Button (Blue) */
+.action-btn.btn-reply:hover {
+    color: var(--color-twitter-blue);
+}
+.action-btn.btn-reply:hover i {
+    background-color: rgba(29, 155, 240, 0.1);
+    box-shadow: 0 0 0 6px rgba(29, 155, 240, 0.1);
+    border-radius: 50%;
+}
+
+/* Retweet Button (Green) */
+.action-btn.btn-retweet:hover {
+    color: var(--color-retweet-green);
+}
+.action-btn.btn-retweet:hover i {
+    background-color: rgba(0, 186, 124, 0.1);
+    box-shadow: 0 0 0 6px rgba(0, 186, 124, 0.1);
+    border-radius: 50%;
+    transform: rotate(180deg);
+}
+
+/* Like Button (Pink) */
+.action-btn.btn-like:hover {
+    color: var(--color-like-pink);
+}
+.action-btn.btn-like:hover i {
+    background-color: rgba(249, 24, 128, 0.1);
+    box-shadow: 0 0 0 6px rgba(249, 24, 128, 0.1);
+    border-radius: 50%;
+}
+.action-btn.btn-like.liked {
+    color: var(--color-like-pink);
+}
+.action-btn.btn-like.liked i {
+    fill: var(--color-like-pink);
+}
+
+/* Views Button (Blue) */
+.action-btn.btn-views:hover {
+    color: var(--color-twitter-blue);
+}
+.action-btn.btn-views:hover i {
+    background-color: rgba(29, 155, 240, 0.1);
+    box-shadow: 0 0 0 6px rgba(29, 155, 240, 0.1);
+    border-radius: 50%;
+}
+
+/* Empty State Styling */
+.empty-feed {
+    padding: 60px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.empty-icon-wrapper {
+    background-color: var(--bg-search);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    color: var(--color-twitter-blue);
+}
+
+.empty-bird-icon {
+    width: 42px;
+    height: 42px;
+}
+
+.empty-feed h2 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.empty-feed p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    max-width: 400px;
+    margin-bottom: 24px;
+}
+
+.quick-preset-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.quick-preset-chips span {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+}
+
+.preset-chip {
+    background-color: var(--bg-search);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.preset-chip:hover {
+    background-color: var(--color-twitter-blue);
+    color: #ffffff;
+    border-color: var(--color-twitter-blue);
+}
+
+/* ==========================================================================
+   Skeleton Loading State Styling
+   ========================================================================== */
+.skeleton-tweet {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 12px;
+    background-color: var(--bg-surface);
+}
+
+.skeleton-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--bg-search);
+    flex-shrink: 0;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.skeleton-header {
+    height: 14px;
+    width: 40%;
+    background-color: var(--bg-search);
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-text {
+    height: 14px;
+    width: 90%;
+    background-color: var(--bg-search);
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-text-short {
+    height: 14px;
+    width: 60%;
+    background-color: var(--bg-search);
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-footer {
+    margin-top: 8px;
+    height: 14px;
+    width: 70%;
+    background-color: var(--bg-search);
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.3; }
+    100% { opacity: 0.6; }
+}
+
+/* ==========================================================================
+   Right Panel Sidebar Widgets
+   ========================================================================== */
+.right-panel {
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+}
+
+.card-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.card-header h3 {
+    font-size: 17px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-header h3 i {
+    width: 20px;
+    height: 20px;
+    color: var(--color-twitter-blue);
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.settings-description {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* API Status Indicator Badge */
+.api-status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: all var(--transition-fast);
+}
+
+.api-status-indicator.status-mock {
+    background-color: rgba(234, 179, 8, 0.08);
+    border: 1px solid rgba(234, 179, 8, 0.2);
+    color: var(--color-warning-gold);
+}
+
+.api-status-indicator.status-mock .status-pulse-dot {
+    background-color: var(--color-warning-gold);
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4);
+    animation: pulseYellow 2s infinite;
+}
+
+.api-status-indicator.status-live {
+    background-color: rgba(0, 186, 124, 0.08);
+    border: 1px solid rgba(0, 186, 124, 0.2);
+    color: var(--color-retweet-green);
+}
+
+.api-status-indicator.status-live .status-pulse-dot {
+    background-color: var(--color-retweet-green);
+    box-shadow: 0 0 0 0 rgba(0, 186, 124, 0.4);
+    animation: pulseGreen 2s infinite;
+}
+
+.status-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+@keyframes pulseYellow {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(234, 179, 8, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
+}
+
+@keyframes pulseGreen {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 186, 124, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 186, 124, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 186, 124, 0); }
+}
+
+/* Credentials Form inputs */
+.credentials-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.input-password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-password-wrapper input {
+    width: 100%;
+    background-color: var(--bg-search);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 40px 10px 12px;
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+    transition: border-color var(--transition-fast);
+}
+
+.input-password-wrapper input:focus {
+    border-color: var(--color-twitter-blue);
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-password-btn i {
+    width: 18px;
+    height: 18px;
+}
+
+.toggle-password-btn:hover {
+    color: var(--text-primary);
+}
+
+.form-help {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.form-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.save-token-btn {
+    flex-grow: 1;
+    background-color: var(--color-twitter-blue);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.save-token-btn:hover {
+    opacity: 0.9;
+}
+
+.clear-token-btn {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-danger-red);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.clear-token-btn:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Endpoint info listing inside card */
+.endpoint-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 13px;
+    margin: 8px 0;
+}
+
+.endpoint-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--bg-search);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.endpoint-list code {
+    font-family: Consolas, Monaco, "Andale Mono", monospace;
+    color: var(--text-primary);
+}
+
+.method {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.method.GET {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.info-footer {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 12px;
+    margin-top: 12px;
+}
+
+/* ==========================================================================
+   Toasts Notifications System
+   ========================================================================== */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    border-left: 4px solid var(--color-twitter-blue);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 300px;
+    max-width: 450px;
+    transform: translateX(120%);
+    animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: all 0.3s ease;
+}
+
+@keyframes toastIn {
+    to { transform: translateX(0); }
+}
+
+.toast.toast-success {
+    border-left-color: var(--color-retweet-green);
+}
+
+.toast.toast-error {
+    border-left-color: var(--color-danger-red);
+}
+
+.toast.toast-warning {
+    border-left-color: var(--color-warning-gold);
+}
+
+.toast-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.toast.toast-success .toast-icon { color: var(--color-retweet-green); }
+.toast.toast-error .toast-icon { color: var(--color-danger-red); }
+.toast.toast-warning .toast-icon { color: var(--color-warning-gold); }
+
+/* ==========================================================================
+   Responsive Design Breakpoints
+   ========================================================================== */
+@media (max-width: 1200px) {
+    .app-container {
+        grid-template-columns: 80px 1fr 320px;
+    }
+    
+    .sidebar {
+        align-items: center;
+        padding: 24px 8px;
+    }
+    
+    .logo-text,
+    .nav-item span,
+    .history-section,
+    .theme-selector {
+        display: none;
+    }
+    
+    .logo-container {
+        padding-left: 0;
+        margin-bottom: 24px;
+    }
+    
+    .nav-item {
+        padding: 12px;
+        border-radius: 50%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 992px) {
+    .app-container {
+        grid-template-columns: 80px 1fr;
+    }
+    
+    .right-panel {
+        display: none; /* Hide configuration panel, we can toggle it */
+    }
+    
+    /* Show sidebar config button to open it as modal/drawer if we want,
+       or just let settings card toggle slide in. For simplicity, we hide the right sidebar. */
+}
+
+@media (max-width: 600px) {
+    .app-container {
+        grid-template-columns: 1fr;
+        padding-bottom: 60px; /* space for bottom nav */
+    }
+    
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        width: 100vw;
+        height: 60px;
+        flex-direction: row;
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        padding: 0 16px;
+        z-index: 100;
+        background-color: var(--bg-app);
+    }
+    
+    .logo-container,
+    .history-section,
+    .theme-selector {
+        display: none;
+    }
+    
+    .sidebar-top {
+        width: 100%;
+    }
+    
+    .nav-links {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        gap: 0;
+    }
+    
+    .nav-item {
+        border-radius: 8px;
+    }
+    
+    .main-header {
+        padding: 12px 16px;
+    }
+    
+    .profile-card {
+        border-top: none;
+    }
+    
+    .profile-banner {
+        height: 100px;
+    }
+    
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        margin-top: 0;
+    }
+    
+    .profile-meta-container {
+        padding: 0 16px 16px 16px;
+        margin-top: -45px;
+    }
+    
+    .tweet-card {
+        padding: 12px 16px;
+    }
+    
+    .tweet-avatar {
+        width: 40px;
+        height: 40px;
+    }
+}

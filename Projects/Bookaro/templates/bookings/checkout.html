@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Checkout | Bookaro{% endblock %}
+
+{% block content %}
+<section class="section" style="min-height: 80vh; display: flex; align-items: center; background: var(--bg-main);">
+    <div class="container" style="max-width: 600px;">
+        <div class="card p-4" style="background: var(--bg-card); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); border: 1px solid var(--border);">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="font-size: 2rem; color: var(--text-main);">Confirm Your Booking</h2>
+                <p style="color: var(--text-muted);">Please review your details before making the payment.</p>
+            </div>
+            
+            <div style="background: rgba(79, 70, 229, 0.05); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem; border: 1px dashed var(--primary-light);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                    <span style="color: var(--text-muted); font-weight: 500;">Service Type</span>
+                    <span style="color: var(--text-main); font-weight: 600;">{{ booking.get_service_type_display }}</span>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                    <span style="color: var(--text-muted); font-weight: 500;">Details</span>
+                    <span style="color: var(--text-main); font-weight: 600; text-align: right;">
+                        {% if booking.service_type == 'FLIGHT' %}
+                            {{ booking.flight.airline }} - {{ booking.flight.flight_number }}<br>
+                            <small>{{ booking.flight.origin }} &rarr; {{ booking.flight.destination }}</small>
+                        {% elif booking.service_type == 'ACCOMMODATION' %}
+                            {{ booking.accommodation.name }}<br>
+                            <small>{{ booking.accommodation.location }}</small>
+                        {% elif booking.service_type == 'PACKAGE' %}
+                            {{ booking.package.name }}
+                        {% endif %}
+                    </span>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; font-size: 1.25rem;">
+                    <span style="color: var(--text-main); font-weight: 700;">Total Amount</span>
+                    <span style="color: var(--primary); font-weight: 800;">&#8377; {{ booking.total_amount }}</span>
+                </div>
+            </div>
+
+            <form action="{% url 'payment_success' %}" method="POST" id="razorpay-form">
+                <script
+                    src="https://checkout.razorpay.com/v1/checkout.js"
+                    data-key="{{ razorpay_merchant_key }}"
+                    data-amount="{{ amount_in_paise }}"
+                    data-currency="{{ currency }}"
+                    data-order_id="{{ razorpay_order_id }}"
+                    data-buttontext="Pay with Razorpay"
+                    data-name="Bookaro Premium"
+                    data-description="{{ booking.get_service_type_display }} Booking"
+                    data-image="https://via.placeholder.com/150/4f46e5/ffffff?text=B"
+                    data-prefill.name="{{ request.user.get_full_name|default:request.user.username }}"
+                    data-prefill.email="{{ request.user.email }}"
+                    data-theme.color="#4f46e5"
+                ></script>
+                <input type="hidden" custom="Hidden Element" name="hidden">
+            </form>
+            
+            <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+                <i class="fa-solid fa-lock" style="margin-right: 0.25rem;"></i> Secure Encrypted Payment
+            </p>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Styling the Razorpay button to match our theme */
+    .razorpay-payment-button {
+        width: 100%;
+        padding: 1rem !important;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: var(--radius-lg) !important;
+        font-weight: 600 !important;
+        font-size: 1.1rem !important;
+        cursor: pointer !important;
+        transition: transform 0.2s, box-shadow 0.2s !important;
+        box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2) !important;
+    }
+    .razorpay-payment-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3) !important;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Travel Packages | Bookaro{% endblock %}
+
+{% block content %}
+<section class="section" style="background: var(--bg-main); padding-top: 8rem;">
+    <div class="container">
+        <div class="page-header reveal" style="text-align: center; margin-bottom: 4rem;">
+            <h1 style="color: var(--text-main);">Curated Experiences</h1>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Book all-inclusive travel packages designed for unforgettable memories.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;">
+            {% for pkg in packages %}
+            <div class="card reveal" style="background: var(--bg-card); border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--border); transition: transform 0.3s; box-shadow: var(--shadow-md);">
+                <div style="height: 250px; position: relative;">
+                    {% if pkg.image %}
+                        <img src="{{ pkg.image.url }}" alt="{{ pkg.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% elif pkg.image_url %}
+                        <img src="{{ pkg.image_url }}" alt="{{ pkg.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2000" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% endif %}
+                    
+                    {% if pkg.is_featured %}
+                        <div style="position: absolute; top: 1rem; left: 1rem; background: var(--primary); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Featured</div>
+                    {% endif %}
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; padding: 2rem 1.5rem 1rem; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.25rem; color: white;">{{ pkg.name }}</h3>
+                        <div style="font-size: 0.9rem; opacity: 0.9;"><i class="fa-solid fa-map-location-dot" style="margin-right: 0.5rem;"></i>{{ pkg.destinations }}</div>
+                    </div>
+                </div>
+                
+                <div style="padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-main); font-weight: 600;">
+                            <i class="fa-regular fa-clock" style="color: var(--primary);"></i> {{ pkg.duration_days }} Days
+                        </div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary);">
+                            &#8377; {{ pkg.price }}
+                        </div>
+                    </div>
+                    
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.6;">
+                        {{ pkg.description }}
+                    </p>
+                    
+                    <form action="{% url 'checkout' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="service_type" value="PACKAGE">
+                        <input type="hidden" name="service_id" value="{{ pkg.id }}">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Book Package</button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 4rem; background: var(--bg-card); border-radius: var(--radius-xl); border: 1px solid var(--border);">
+                <i class="fa-solid fa-suitcase-rolling" style="font-size: 3rem; color: var(--slate-200); margin-bottom: 1rem; display: block;"></i>
+                <p style="color: var(--text-muted);">No packages available right now.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Explore Services | Bookaro - Travel Excellence{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 10rem; min-height: 100vh;">
+    <div class="container">
+        <div class="page-header reveal">
+            <h1 style="margin-bottom: 1rem;">Service Directory</h1>
+            <p>Explore our curated list of stays, rentals, and premium travel services.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 280px 1fr; gap: 3rem; align-items: start;">
+            <!-- Filter Sidebar -->
+            <aside class="reveal card" style="padding: 2rem; position: sticky; top: 7rem;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fa-solid fa-filter" style="color: var(--primary);"></i>
+                    Filter Services
+                </h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; display: block;">Search</label>
+                        <div class="form-control" style="margin-bottom: 0;">
+                            <input type="text" placeholder="Service name..." style="padding: 0.6rem 1rem;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; display: block;">Category</label>
+                        <select class="form-control" style="width: 100%; padding: 0.6rem 1rem; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: var(--bg-card); color: var(--text-main);">
+                            <option>All Categories</option>
+                            <option>Luxury Hotels</option>
+                            <option>Private Villas</option>
+                            <option>Flight Services</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; display: block;">Price Range</label>
+                        <input type="range" style="width: 100%; accent-color: var(--primary);">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">
+                            <span>INR 500</span>
+                            <span>INR 5000+</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Apply Filters</button>
+                    <button class="btn btn-outline" style="width: 100%; font-size: 0.85rem;">Reset All</button>
+                </div>
+            </aside>
+
+            <!-- Table Section -->
+            <div class="reveal" style="transition-delay: 0.1s;">
+                <div class="card" style="overflow-x: auto; padding: 1.5rem;">
+                    <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border);">
+                                <th style="text-align: left; padding: 1.5rem 1rem; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em;">Service Details</th>
+                                <th style="text-align: left; padding: 1.5rem 1rem; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em;">Category</th>
+                                <th style="text-align: left; padding: 1.5rem 1rem; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em;">Pricing</th>
+                                <th style="text-align: right; padding: 1.5rem 1rem; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for accommodation in accommodations %}
+                            <tr style="border-bottom: 1px solid var(--border); transition: var(--transition);" onmouseover="this.style.background='var(--slate-50)'" onmouseout="this.style.background='transparent'">
+                                <td style="padding: 1.5rem 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 1.25rem;">
+                                        {% if accommodation.image %}
+                                            <img src="{{ accommodation.image.url }}" alt="Service" style="width: 64px; height: 64px; border-radius: var(--radius-lg); object-fit: cover; border: 1px solid var(--border);">
+                                        {% else %}
+                                            <div style="width: 64px; height: 64px; border-radius: var(--radius-lg); background: var(--slate-100); display: flex; align-items: center; justify-content: center; color: var(--slate-400);">
+                                                <i class="fa-solid fa-hotel"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem;">{{ accommodation.name }}</div>
+                                            <div style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+                                                <i class="fa-solid fa-location-dot" style="font-size: 0.75rem;"></i>
+                                                {{ accommodation.location|default:"Global" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="padding: 1.5rem 1rem;">
+                                    <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary); padding: 0.35rem 0.85rem; border-radius: 2rem; font-size: 0.75rem; font-weight: 700;">{{ accommodation.category|default:"Premium Stay" }}</span>
+                                </td>
+                                <td style="padding: 1.5rem 1rem;">
+                                    <div style="font-weight: 800; color: var(--text-main); font-size: 1.15rem;">INR {{ accommodation.price_per_night }}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">per night / avg</div>
+                                </td>
+                                <td style="padding: 1.5rem 1rem; text-align: right;">
+                                    <a href="#" class="btn btn-primary btn-sm">Book Now</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" style="padding: 5rem; text-align: center;">
+                                    <i class="fa-solid fa-magnifying-glass" style="font-size: 2.5rem; color: var(--slate-200); margin-bottom: 1.5rem; display: block;"></i>
+                                    <p style="color: var(--text-muted); font-size: 1.1rem;">No services found matching your criteria.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 3rem; margin-bottom: 5rem;">
+                    <a href="#" class="btn btn-outline btn-sm" style="width: 40px; height: 40px; padding: 0;"><i class="fa-solid fa-chevron-left"></i></a>
+                    <a href="#" class="btn btn-primary btn-sm" style="width: 40px; height: 40px; padding: 0;">1</a>
+                    <a href="#" class="btn btn-outline btn-sm" style="width: 40px; height: 40px; padding: 0;">2</a>
+                    <a href="#" class="btn btn-outline btn-sm" style="width: 40px; height: 40px; padding: 0;"><i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+
+                <!-- Travel Packages Section -->
+                <div class="page-header reveal" style="padding-top: 2rem; padding-bottom: 2rem; text-align: left; margin: 0;">
+                    <h2 style="margin-bottom: 0.5rem; font-size: 1.75rem;">Curated Travel Packages</h2>
+                    <p style="color: var(--text-muted); font-size: 1rem;">Exclusive multi-day experiences and honeymoons.</p>
+                </div>
+                
+                <div class="property-grid reveal" style="margin-top: 1rem;">
+                    {% for package in packages %}
+                    <div class="card property-card">
+                        <div class="card-image-wrap">
+                            {% if package.image_url %}
+                                <img src="{{ package.image_url }}" alt="{{ package.name }}">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2673" alt="Package">
+                            {% endif %}
+                            {% if package.is_featured %}
+                            <div class="badge" style="background: rgba(245, 158, 11, 0.9);">Featured</div>
+                            {% endif %}
+                        </div>
+                        <div class="property-info">
+                            <div class="property-location">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                <span>{{ package.destinations }}</span>
+                            </div>
+                            <h3 class="property-name" style="font-size: 1.15rem;">{{ package.name }}</h3>
+                            <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+                                <i class="fa-regular fa-clock" style="margin-right: 0.4rem;"></i> {{ package.duration_days }} Days
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ package.description }}</p>
+                            <div class="property-meta" style="padding-top: 1.25rem;">
+                                <div class="price" style="font-size: 1.1rem;">
+                                    INR {{ package.price }}
+                                </div>
+                                <a href="#" class="btn btn-outline btn-sm">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                        <div style="grid-column: 1/-1; padding: 3rem; text-align: center; background: var(--bg-card); border-radius: var(--radius-xl); border: 1px solid var(--border);">
+                            <p style="color: var(--text-muted);">No packages currently available.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Table specific overrides for dark mode */
+    [data-theme="dark"] tr:hover {
+        background: rgba(255, 255, 255, 0.03) !important;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Country Explorer{% endblock %}</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Premium Stylesheet -->
+    <link rel="stylesheet" href="{% static 'explorer/style.css' %}">
+</head>
+<body>
+    <!-- Background Elements for Visual Depth -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    
+    <div class="app-container">
+        <header class="app-header">
+            <div class="brand">
+                <i class="fa-solid fa-earth-americas brand-icon"></i>
+                <h1>Geo<span>Explorer</span></h1>
+            </div>
+            <p class="tagline">Search and retrieve real-time demographics, languages, and currency details from across the globe.</p>
+        </header>
+
+        <main class="app-content">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="app-footer">
+            <p>Powered by the <a href="https://restcountries.com/" target="_blank" rel="noopener noreferrer">REST Countries API</a></p>
+        </footer>
+    </div>
+</body>
+</html>

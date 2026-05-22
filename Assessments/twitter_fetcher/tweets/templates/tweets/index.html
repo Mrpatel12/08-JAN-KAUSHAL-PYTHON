@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X/Twitter Fetcher (Developer Mock Dashboard)</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="dim-theme">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="logo-container">
+                    <svg class="logo-x" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                    </svg>
+                    <span class="logo-text">Fetcher</span>
+                </div>
+                
+                <nav class="nav-links">
+                    <a href="#" class="nav-item active">
+                        <i data-lucide="home"></i>
+                        <span>Feed</span>
+                    </a>
+                    <a href="#" class="nav-item" id="toggle-settings-btn">
+                        <i data-lucide="sliders"></i>
+                        <span>Controls</span>
+                    </a>
+                </nav>
+            </div>
+            
+            <div class="sidebar-section history-section">
+                <h3 class="section-title">
+                    <i data-lucide="history"></i>
+                    <span>Search History</span>
+                </h3>
+                <ul class="history-list" id="search-history">
+                    <li class="history-empty">No recent searches</li>
+                </ul>
+                <button class="clear-history-btn" id="clear-history">Clear History</button>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="theme-selector">
+                    <button class="theme-btn active" data-theme="dim" title="Dim Mode">
+                        <i data-lucide="moon"></i>
+                    </button>
+                    <button class="theme-btn" data-theme="dark" title="Lights Out">
+                        <i data-lucide="zap"></i>
+                    </button>
+                    <button class="theme-btn" data-theme="light" title="Light Mode">
+                        <i data-lucide="sun"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header & Search Bar -->
+            <header class="main-header">
+                <div class="header-title">
+                    <h2>Home</h2>
+                    <span class="subtitle" id="feed-status-text">Developer Mock Dashboard</span>
+                </div>
+                
+                <form id="search-form" class="search-form">
+                    <div class="search-input-wrapper">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <input type="text" id="username-input" placeholder="Search simulated user (e.g. elonmusk, NASA, Google)..." required autocomplete="off">
+                        <button type="submit" class="search-submit-btn">
+                            <span class="btn-text">Search</span>
+                            <span class="loader-spinner" style="display: none;"></span>
+                        </button>
+                    </div>
+                </form>
+            </header>
+
+            <!-- Status Banner -->
+            <div id="status-banner" class="status-banner banner-mock">
+                <div class="banner-content">
+                    <i data-lucide="terminal" class="banner-icon"></i>
+                    <div class="banner-text">
+                        <strong>Developer Mock Mode Active</strong> - Simulating API data and behaviors locally. Customize delay & status codes in the Controls panel.
+                    </div>
+                </div>
+                <button class="banner-close-btn" id="dismiss-banner">&times;</button>
+            </div>
+
+            <!-- Profile Info Header (Hidden by default until search) -->
+            <section id="profile-card" class="profile-card" style="display: none;">
+                <div class="profile-banner"></div>
+                <div class="profile-meta-container">
+                    <div class="avatar-row">
+                        <img id="profile-avatar" class="profile-avatar" src="" alt="Avatar">
+                        <div class="badge-row">
+                            <span id="badge-mode" class="badge badge-mock">DEV MOCK</span>
+                        </div>
+                    </div>
+                    <div class="profile-identity">
+                        <div class="name-container">
+                            <h1 id="profile-name">User Name</h1>
+                            <i data-lucide="badge-check" class="verified-icon" id="profile-verified" style="display: none;"></i>
+                        </div>
+                        <div class="handle-container">@<span id="profile-handle">username</span></div>
+                    </div>
+                    
+                    <p id="profile-bio" class="profile-bio">User biography text.</p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <strong id="stat-following">0</strong>
+                            <span>Following</span>
+                        </div>
+                        <div class="stat-item">
+                            <strong id="stat-followers">0</strong>
+                            <span>Followers</span>
+                        </div>
+                        <div class="stat-item">
+                            <strong id="stat-tweets">0</strong>
+                            <span>Tweets</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skeleton Loader (Shown during AJAX call) -->
+            <div id="skeleton-loader" class="tweets-container" style="display: none;">
+                <div class="skeleton-tweet">
+                    <div class="skeleton-avatar"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text-short"></div>
+                        <div class="skeleton-footer"></div>
+                    </div>
+                </div>
+                <div class="skeleton-tweet">
+                    <div class="skeleton-avatar"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text-short"></div>
+                        <div class="skeleton-footer"></div>
+                    </div>
+                </div>
+                <div class="skeleton-tweet">
+                    <div class="skeleton-avatar"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text-short"></div>
+                        <div class="skeleton-footer"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feed Section -->
+            <section id="tweets-feed" class="tweets-container">
+                <div class="empty-feed">
+                    <div class="empty-icon-wrapper">
+                        <svg class="empty-bird-icon" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </div>
+                    <h2>Search for a user</h2>
+                    <p>Enter any Twitter (X) username in the search bar above to fetch and display their latest 5 tweets in Developer Mock Mode.</p>
+                    <div class="quick-preset-chips">
+                        <span>Try searching:</span>
+                        <button class="preset-chip">elonmusk</button>
+                        <button class="preset-chip">NASA</button>
+                        <button class="preset-chip">Google</button>
+                        <button class="preset-chip">OpenAI</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Panels: Settings and Details -->
+        <aside class="right-panel">
+            <div class="card settings-card" id="settings-card">
+                <div class="card-header">
+                    <h3>
+                        <i data-lucide="sliders"></i>
+                        <span>Developer Controls</span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="settings-description">
+                        Simulate diverse network speeds and X API response codes to validate the app's styling states and error handling.
+                    </p>
+
+                    <form id="credentials-form" class="credentials-form">
+                        <!-- Simulated Status Codes -->
+                        <div class="form-group">
+                            <label for="status-code-select">Simulated API Status</label>
+                            <div class="input-password-wrapper">
+                                <select id="status-code-select" style="width:100%; background-color:var(--bg-search); border:1px solid var(--border-color); border-radius:8px; padding:10px 12px; color:var(--text-primary); outline:none;">
+                                    <option value="200">200 OK (Fetch Success)</option>
+                                    <option value="404">404 Not Found (Missing User)</option>
+                                    <option value="429">429 Rate Limit (API Quota Limit)</option>
+                                    <option value="500">500 Server Error (API Down)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Simulated Latency -->
+                        <div class="form-group">
+                            <label for="latency-select">Simulated Network Delay</label>
+                            <div class="input-password-wrapper">
+                                <select id="latency-select" style="width:100%; background-color:var(--bg-search); border:1px solid var(--border-color); border-radius:8px; padding:10px 12px; color:var(--text-primary); outline:none;">
+                                    <option value="0">No Delay (Instant)</option>
+                                    <option value="0.6">Short Delay (0.6s - Default)</option>
+                                    <option value="2.0">Long Delay (2.0s - Test Shimmers)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="save-token-btn" id="save-token-btn" style="background-color: var(--color-twitter-blue); color: white; border: none; border-radius: 8px; padding: 10px; cursor: pointer; font-weight:700;">Apply Configurations</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card info-card">
+                <div class="card-header">
+                    <h3>
+                        <i data-lucide="info"></i>
+                        <span>Mock Mode Details</span>
+                    </h3>
+                </div>
+                <div class="card-body" style="font-size:13.5px; line-height:1.4;">
+                    <p>Under Developer Mock Mode, search targets behave differently:</p>
+                    <ul style="padding-left:16px; margin:6px 0; display:flex; flex-direction:column; gap:6px;">
+                        <li><strong>NASA, ElonMusk, Google, OpenAI</strong>: Populates user bios, real avatars, and customized preset tweets.</li>
+                        <li><strong>Other names</strong>: Dynamically generates procedural profiles and tweet text payloads using Dicebear SVG avatars.</li>
+                    </ul>
+                    <p class="info-footer" style="margin-top:10px;">
+                        Completely local. Zero network requests or developer tokens required.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- CSRF Context from Django -->
+    <script>
+        const DJANGO_CSRF_TOKEN = "{{ csrf_token }}";
+        const INITIAL_LATENCY = {{ dev_latency }};
+        const INITIAL_STATUS = "{{ dev_status }}";
+    </script>
+
+    <!-- Custom Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

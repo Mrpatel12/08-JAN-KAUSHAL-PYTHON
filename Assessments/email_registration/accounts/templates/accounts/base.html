@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Secure Register | NexusAuth{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'accounts/css/styles.css' %}">
+</head>
+<body class="auth-body">
+    <div class="auth-wrapper">
+        <header class="auth-header">
+            <div class="auth-logo">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
+                    <path d="M2 17L12 22L22 17"/>
+                    <path d="M2 12L12 17L22 12"/>
+                </svg>
+                <span class="logo-text">NexusAuth</span>
+            </div>
+        </header>
+
+        <main class="auth-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="auth-footer">
+            <p>© 2026 NexusAuth Security. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

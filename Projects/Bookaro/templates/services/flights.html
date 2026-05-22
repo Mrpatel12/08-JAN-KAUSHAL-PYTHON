@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Book Flights | Bookaro{% endblock %}
+
+{% block content %}
+<section class="section" style="background: var(--bg-main); padding-top: 8rem;">
+    <div class="container">
+        <div class="page-header reveal" style="text-align: center; margin-bottom: 4rem;">
+            <h1 style="color: var(--text-main);">Find Your Next Flight</h1>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Search from hundreds of national and international flights with premium airlines.</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="card p-4 reveal" style="margin-bottom: 3rem; background: var(--bg-card); border: 1px solid var(--border);">
+            <form method="GET" action="{% url 'flights_list' %}" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 500;">Origin</label>
+                    <input type="text" name="origin" value="{{ search_origin }}" class="form-control" placeholder="City or Airport" list="cities-list" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg-main); color: var(--text-main);">
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 500;">Destination</label>
+                    <input type="text" name="destination" value="{{ search_dest }}" class="form-control" placeholder="City or Airport" list="cities-list" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg-main); color: var(--text-main);">
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 500;">Type</label>
+                    <select name="type" class="form-control" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg-main); color: var(--text-main);">
+                        <option value="">All Flights</option>
+                        <option value="national" {% if request.GET.type == 'national' %}selected{% endif %}>National</option>
+                        <option value="international" {% if request.GET.type == 'international' %}selected{% endif %}>International</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem;">Search</button>
+                </div>
+            </form>
+            
+            <datalist id="cities-list">
+                {% for city in COMMON_CITIES %}
+                    <option value="{{ city }}">
+                {% endfor %}
+            </datalist>
+        </div>
+
+        <!-- Flights List -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            {% for flight in flights %}
+            <div class="card reveal" style="display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); flex-wrap: wrap; gap: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; background: var(--bg-main); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);">
+                        {% if flight.image %}
+                            <img src="{{ flight.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <i class="fa-solid fa-plane" style="font-size: 1.5rem; color: var(--primary);"></i>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 0.25rem; font-size: 1.2rem; color: var(--text-main);">{{ flight.airline }} <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;">{{ flight.flight_number }}</span></h3>
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">
+                            {% if flight.is_international %}
+                            <span style="display: inline-block; padding: 0.1rem 0.5rem; background: rgba(79, 70, 229, 0.1); color: var(--primary); border-radius: var(--radius-sm); font-size: 0.75rem; margin-bottom: 0.5rem;">International</span>
+                            {% else %}
+                            <span style="display: inline-block; padding: 0.1rem 0.5rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: var(--radius-sm); font-size: 0.75rem; margin-bottom: 0.5rem;">National</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 3rem; flex: 1; justify-content: center;">
+                    <div style="text-align: right;">
+                        <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-main);">{{ flight.departure_time|time:"H:i" }}</div>
+                        <div style="font-size: 0.9rem; color: var(--text-muted);">{{ flight.origin }}</div>
+                    </div>
+                    
+                    <div style="flex: 1; max-width: 150px; text-align: center; position: relative;">
+                        <div style="height: 2px; background: var(--border); width: 100%; position: absolute; top: 50%; z-index: 1;"></div>
+                        <i class="fa-solid fa-plane" style="position: relative; z-index: 2; color: var(--primary); background: var(--bg-card); padding: 0 0.5rem;"></i>
+                    </div>
+                    
+                    <div style="text-align: left;">
+                        <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-main);">Arrival</div>
+                        <div style="font-size: 0.9rem; color: var(--text-muted);">{{ flight.destination }}</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: right; min-width: 150px;">
+                    <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">&#8377; {{ flight.price }}</div>
+                    <form action="{% url 'checkout' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="service_type" value="FLIGHT">
+                        <input type="hidden" name="service_id" value="{{ flight.id }}">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Book Now</button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <div style="text-align: center; padding: 4rem; background: var(--bg-card); border-radius: var(--radius-xl); border: 1px solid var(--border);">
+                <i class="fa-solid fa-plane-slash" style="font-size: 3rem; color: var(--slate-200); margin-bottom: 1rem; display: block;"></i>
+                <p style="color: var(--text-muted);">No flights found for your search criteria.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

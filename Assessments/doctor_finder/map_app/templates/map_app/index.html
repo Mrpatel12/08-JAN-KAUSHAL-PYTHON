@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareFind SF - Find Local Doctors</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'map_app/css/style.css' %}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <div class="logo-area">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                        <path d="M12 5v14M5 12h14" stroke-opacity="0.3"/>
+                    </svg>
+                    <h1>CareFind<span>SF</span></h1>
+                </div>
+                <p class="subtitle">Discover healthcare professionals near you</p>
+                
+                <!-- API Status Badge -->
+                <div class="api-status-container" id="api-status-badge">
+                    <span class="pulse-indicator"></span>
+                    <span class="status-text">Checking API Key...</span>
+                    <button class="btn-settings" id="btn-open-settings" title="Change API Key">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Search Area -->
+            <div class="search-filters">
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.3-4.3"/>
+                    </svg>
+                    <input type="text" id="search-input" placeholder="Search by name, address, clinic...">
+                    <button class="clear-search" id="btn-clear-search" style="display: none;">&times;</button>
+                </div>
+
+                <!-- Specialty Filter Pills -->
+                <div class="specialty-pills-container">
+                    <div class="specialty-pills" id="specialty-pills">
+                        <button class="pill active" data-specialty="">All Specialties</button>
+                        {% for specialty in specialties %}
+                            <button class="pill" data-specialty="{{ specialty }}">{{ specialty }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor List -->
+            <div class="doctor-list-wrapper">
+                <div class="results-count" id="results-count">Loading doctors...</div>
+                <div class="doctor-list" id="doctor-list">
+                    <!-- Dynamic doctor list loaded via JS -->
+                    <div class="list-placeholder">
+                        <div class="spinner"></div>
+                        <p>Loading medical network...</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Map Container -->
+        <main class="map-wrapper">
+            <div id="map">
+                <!-- Google Map loads here -->
+                <div class="map-placeholder">
+                    <div class="map-placeholder-card">
+                        <h3>Map Configuration Needed</h3>
+                        <p>Google Maps requires an API key to display the map. You can supply a key by setting the environment variable or pasting it below.</p>
+                        <button class="btn btn-primary" id="btn-setup-map-center">Configure API Key</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Floating Recenter/Reset Button -->
+            <button class="floating-btn" id="btn-recenter-map" title="Recenter Map" style="display: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
+                </svg>
+            </button>
+        </main>
+
+        <!-- Doctor Details Drawer (Slide up / slide in) -->
+        <div class="details-drawer" id="details-drawer">
+            <div class="drawer-header">
+                <button class="btn-close-drawer" id="btn-close-drawer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="drawer-content" id="drawer-content">
+                <!-- Dynamic contents -->
+            </div>
+        </div>
+
+        <!-- API Settings Modal -->
+        <div class="modal-overlay" id="settings-modal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2>Google Maps API Key</h2>
+                    <button class="btn-close-modal" id="btn-close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>To use Google Maps features (interactive map, markers, geocoding), you must provide a valid API Key. For local development, this key will be stored securely in your browser's local storage.</p>
+                    
+                    <div class="form-group">
+                        <label for="input-api-key">Google Maps Javascript API Key</label>
+                        <input type="password" id="input-api-key" placeholder="AIzaSy...">
+                        <small class="help-text">Your key remains locally in your browser and is only sent to Google to load the map.</small>
+                    </div>
+
+                    <div class="backend-key-info" id="backend-key-status">
+                        <!-- Shows if there's a backend configured key -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="btn-clear-api-key">Clear Local Key</button>
+                    <button class="btn btn-primary" id="btn-save-api-key">Save & Reload Map</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pass configuration values from Django -->
+    <script>
+        window.djangoConfig = {
+            backendApiKey: "{{ google_maps_api_key }}",
+            apiDoctorsUrl: "{% url 'map_app:api_doctors' %}",
+            staticUrl: "{% get_static_prefix %}"
+        };
+    </script>
+    
+    <!-- App JavaScript -->
+    <script src="{% static 'map_app/js/map.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bookaro | Premium Booking Experience{% endblock %}</title>
+    <meta name="description" content="Bookaro - The world's most professional booking platform.">
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=4.0">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://via.placeholder.com/32/4f46e5/ffffff?text=B">
+    
+    {% block extra_head %}{% endblock %}
+
+    <!-- Theme Initialization (Prevents flickering) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-content">
+            <a href="/" class="logo">BOOKARO</a>
+            
+            <ul class="nav-links" id="nav-links">
+                <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+                <li><a href="{% url 'flights_list' %}" class="{% if request.resolver_match.url_name == 'flights_list' %}active{% endif %}">Flights</a></li>
+                <li><a href="{% url 'accommodations_list' %}" class="{% if request.resolver_match.url_name == 'accommodations_list' %}active{% endif %}">Stays</a></li>
+                <li><a href="{% url 'packages_list' %}" class="{% if request.resolver_match.url_name == 'packages_list' %}active{% endif %}">Packages</a></li>
+                <li><a href="{% url 'contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a></li>
+            </ul>
+            
+            <div class="nav-btns">
+                <button id="theme-toggle" class="btn-theme-toggle" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon" id="theme-icon"></i>
+                </button>
+                
+                {% if user.is_authenticated %}
+                    <div class="user-menu">
+                        <a href="{% url 'edit_profile' %}" class="user-profile">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="Profile" class="nav-avatar">
+                            {% else %}
+                                <div class="nav-avatar-placeholder"><i class="fa-solid fa-user"></i></div>
+                            {% endif %}
+                            <span class="nav-username">{{ user.username }}</span>
+                        </a>
+                        <a href="{% url 'logout' %}" class="btn btn-outline btn-sm">Logout</a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline btn-sm">Login</a>
+                    <a href="{% url 'signup' %}" class="btn btn-primary btn-sm">Get Started</a>
+                {% endif %}
+            </div>
+
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                <i class="fa-solid {% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 1.5rem;">BOOKARO</div>
+                    <p style="color: var(--slate-400); font-size: 0.95rem;">Elevating the travel experience with seamless booking solutions and premium service. Your journey begins with a single click.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'accommodations_list' %}">Hotels & Villas</a></li>
+                        <li><a href="{% url 'flights_list' %}">Flight Search</a></li>
+                        <li><a href="{% url 'packages_list' %}">Travel Packages</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Bookaro Inc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* Modernized Styles for Components in Base */
+        .btn-theme-toggle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-right: 1rem;
+        }
+        .btn-theme-toggle:hover {
+            background: var(--slate-100);
+            transform: rotate(15deg);
+        }
+        
+        .navbar .nav-username,
+        .navbar .btn-outline,
+        .navbar .logo {
+            color: white !important;
+        }
+        .navbar .btn-outline {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        /* Dark Navbar Elements */
+        .navbar .nav-username,
+        .navbar .btn-outline,
+        .navbar .nav-links a {
+            color: white !important;
+        }
+        .navbar .btn-outline {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+        }
+        .navbar .logo {
+            background: none !important;
+            -webkit-text-fill-color: white !important;
+            color: white !important;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+        }
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-light);
+        }
+        .nav-avatar-placeholder {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--slate-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--slate-400);
+            border: 2px solid var(--slate-200);
+        }
+        .nav-username { font-weight: 600; font-size: 0.9rem; }
+        
+        .messages-container {
+            position: fixed;
+            top: 6rem;
+            right: 2rem;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .message {
+            background: var(--bg-card);
+            color: var(--text-main);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 280px;
+            border-left: 4px solid var(--primary);
+            animation: slideIn 0.4s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .message.success { border-left-color: #10b981; }
+        .message.error { border-left-color: #ef4444; }
+        
+        .footer-links li a {
+            font-size: 0.9rem;
+            color: var(--slate-400);
+            transition: var(--transition);
+        }
+        .footer-links li a:hover { color: white; padding-left: 4px; }
+        .social-links a {
+            color: var(--slate-400);
+            font-size: 1.2rem;
+            margin-right: 1.5rem;
+            transition: var(--transition);
+        }
+        .social-links a:hover { color: var(--primary-light); transform: translateY(-2px); }
+
+        /* Dark Navbar Logic for Light Mode */
+        .navbar .nav-username,
+        .navbar .btn-outline,
+        .navbar .nav-links a {
+            color: white !important;
+        }
+        .navbar .btn-outline {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+        }
+        .navbar .logo {
+            background: none !important;
+            -webkit-text-fill-color: white !important;
+            color: white !important;
+        }
+        .navbar .nav-links a::after {
+            background: var(--primary-light) !important;
+        }
+    </style>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        const updateThemeUI = (theme) => {
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            }
+        };
+
+        // Initialize UI icon based on theme set in head
+        updateThemeUI(html.getAttribute('data-theme'));
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            updateThemeUI(newTheme);
+        });
+
+        // Navbar Scroll
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // Mobile toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.getElementById('nav-links');
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Reveal animations
+        const reveal = () => {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', reveal);
+        reveal();
+    </script>
+</body>
+</html>

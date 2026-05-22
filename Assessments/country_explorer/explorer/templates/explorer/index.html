@@ -1,0 +1,170 @@
+{% extends 'explorer/base.html' %}
+
+{% block title %}
+    {% if country_data %}{{ country_data.common_name }} - GeoExplorer{% else %}GeoExplorer - Country Information Portal{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="search-section">
+    <form action="{% url 'explorer:index' %}" method="GET" class="search-form">
+        <div class="search-wrapper">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" 
+                   name="query" 
+                   value="{{ query }}" 
+                   placeholder="Enter country name (e.g., Japan, Canada, Brazil...)" 
+                   required 
+                   autocomplete="off" 
+                   autofocus
+                   class="search-input">
+            {% if query %}
+                <a href="{% url 'explorer:index' %}" class="clear-btn" title="Clear search">
+                    <i class="fa-solid fa-xmark"></i>
+                </a>
+            {% endif %}
+            <button type="submit" class="search-submit">Search</button>
+        </div>
+    </form>
+
+    <!-- Quick suggestions -->
+    <div class="quick-suggestions">
+        <span class="suggestion-label">Popular searches:</span>
+        <a href="?query=India" class="suggestion-link"><i class="fa-solid fa-location-dot"></i> India</a>
+        <a href="?query=Japan" class="suggestion-link"><i class="fa-solid fa-location-dot"></i> Japan</a>
+        <a href="?query=Canada" class="suggestion-link"><i class="fa-solid fa-location-dot"></i> Canada</a>
+        <a href="?query=Brazil" class="suggestion-link"><i class="fa-solid fa-location-dot"></i> Brazil</a>
+        <a href="?query=Germany" class="suggestion-link"><i class="fa-solid fa-location-dot"></i> Germany</a>
+    </div>
+</section>
+
+{% if error_message %}
+    <div class="error-card fade-in">
+        <i class="fa-solid fa-circle-exclamation error-icon"></i>
+        <div class="error-details">
+            <h3>Something went wrong</h3>
+            <p>{{ error_message }}</p>
+        </div>
+    </div>
+{% endif %}
+
+{% if country_data %}
+    <div class="results-card fade-in">
+        <!-- Card Header with Flag and Basic Info -->
+        <div class="card-header-block">
+            {% if country_data.flag_url %}
+                <div class="flag-container">
+                    <img src="{{ country_data.flag_url }}" alt="{{ country_data.flag_alt }}" class="country-flag">
+                </div>
+            {% endif %}
+            
+            <div class="name-block">
+                <div class="title-row">
+                    <h2 class="common-name">{{ country_data.common_name }}</h2>
+                    {% if country_data.coat_of_arms %}
+                        <img src="{{ country_data.coat_of_arms }}" alt="Coat of Arms" class="coat-of-arms-thumb" title="Coat of Arms">
+                    {% endif %}
+                </div>
+                <p class="official-name">{{ country_data.official_name }}</p>
+                <div class="meta-badges">
+                    <span class="badge"><i class="fa-solid fa-map-pin"></i> Capital: {{ country_data.capital }}</span>
+                    <span class="badge"><i class="fa-solid fa-earth-asia"></i> {{ country_data.region }} / {{ country_data.subregion }}</span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Grid of Major Details requested by User -->
+        <div class="details-grid">
+            <!-- Metric Card: Population -->
+            <div class="metric-card">
+                <div class="card-glow"></div>
+                <div class="metric-icon pop-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="metric-info">
+                    <h4>Population</h4>
+                    <span class="metric-value">{{ country_data.population }}</span>
+                    <span class="metric-label">Citizens</span>
+                </div>
+            </div>
+
+            <!-- Metric Card: Languages -->
+            <div class="metric-card">
+                <div class="card-glow"></div>
+                <div class="metric-icon lang-icon">
+                    <i class="fa-solid fa-language"></i>
+                </div>
+                <div class="metric-info">
+                    <h4>Languages</h4>
+                    <div class="pills-container">
+                        {% for language in country_data.languages %}
+                            <span class="pill lang-pill">{{ language }}</span>
+                        {% empty %}
+                            <span class="pill-empty">None listed</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metric Card: Currencies -->
+            <div class="metric-card">
+                <div class="card-glow"></div>
+                <div class="metric-icon curr-icon">
+                    <i class="fa-solid fa-money-bill-transfer"></i>
+                </div>
+                <div class="metric-info">
+                    <h4>Currency</h4>
+                    <div class="pills-container">
+                        {% for currency in country_data.currencies %}
+                            <span class="pill curr-pill">{{ currency }}</span>
+                        {% empty %}
+                            <span class="pill-empty">None listed</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secondary Information Grid -->
+        <div class="secondary-info-grid">
+            <div class="info-section">
+                <h3><i class="fa-solid fa-clock"></i> Timezone(s)</h3>
+                <div class="pills-container">
+                    {% for timezone in country_data.timezones %}
+                        <span class="pill secondary-pill">{{ timezone }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3><i class="fa-solid fa-border-all"></i> Bordering Countries</h3>
+                <div class="pills-container">
+                    {% for border in country_data.borders %}
+                        <span class="pill border-pill">{{ border }}</span>
+                    {% empty %}
+                        <span class="pill-empty">No land borders (Island nation)</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Links -->
+        {% if country_data.map_url %}
+            <div class="action-section">
+                <a href="{{ country_data.map_url }}" target="_blank" rel="noopener noreferrer" class="map-link-btn">
+                    <i class="fa-solid fa-map-location-dot"></i> View on Google Maps
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% elif not query %}
+    <!-- Welcome Screen / Empty State -->
+    <div class="welcome-card fade-in">
+        <i class="fa-solid fa-globe welcome-icon"></i>
+        <h2>Welcome to GeoExplorer</h2>
+        <p>Type the name of any country in the search bar above to fetch real-time data including population size, official languages spoken, currency units, regional structures, flag previews, and more.</p>
+        <p class="try-hint">Try searching for <strong>Germany</strong>, <strong>Iceland</strong>, or <strong>South Korea</strong> to see it in action.</p>
+    </div>
+{% endif %}
+{% endblock %}

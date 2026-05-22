@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us | Bookaro - Professional Excellence{% endblock %}
+
+{% block content %}
+<!-- Standard Header Pattern -->
+<section class="section" style="padding-top: 10rem; background: var(--bg-card); border-bottom: 1px solid var(--border);">
+    <div class="container">
+        <div class="page-header reveal">
+            <span style="text-transform: uppercase; letter-spacing: 0.2em; font-weight: 700; color: var(--primary); font-size: 0.8rem; display: block; margin-bottom: 1rem;">Our Mission</span>
+            <h1 style="margin-bottom: 1.5rem;">Redefining Modern Travel</h1>
+            <p style="max-width: 700px; margin: 0 auto;">At Bookaro, we bridge the gap between inspiration and reality, providing a seamless platform for the world's most discerning travelers.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Story Section -->
+<section class="section">
+    <div class="container">
+        <div class="grid-2 align-center">
+            <div class="reveal">
+                <div style="position: relative; border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-2xl);">
+                    <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=2574" alt="Travel" style="width: 100%; display: block;">
+                    <div class="glass" style="position: absolute; bottom: 2rem; left: 2rem; right: 2rem; padding: 2rem; border-radius: var(--radius-xl);">
+                        <h4 style="margin-bottom: 0.5rem; color: var(--primary);">Since 2026</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Pioneering the next generation of digital booking experiences.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="reveal" style="transition-delay: 0.1s;">
+                <h2 style="margin-bottom: 1.5rem;">Why Bookaro?</h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1.5rem; line-height: 1.8;">Travel should be about the destination, not the difficulty of getting there. We removed every friction point to create a platform that doesn't just show you options—it provides the *right* options.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem;">
+                    <div>
+                        <h3 style="margin-bottom: 0; color: var(--primary);">15k+</h3>
+                        <p style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Stays</p>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 0; color: var(--primary);">100%</h3>
+                        <p style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Verified</p>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 0; color: var(--primary);">24/7</h3>
+                        <p style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Expertise</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Value Cards (Standard Pattern) -->
+<section class="section" style="background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;">
+            <div class="card reveal" style="padding: 3rem; text-align: center; background: var(--bg-body);">
+                <div style="width: 60px; height: 60px; background: rgba(79, 70, 229, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--primary); font-size: 1.5rem;">
+                    <i class="fa-solid fa-handshake-angle"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Trust First</h3>
+                <p style="font-size: 0.95rem; color: var(--text-muted);">We only partner with verified service providers to ensure your peace of mind.</p>
+            </div>
+            <div class="card reveal" style="padding: 3rem; text-align: center; background: var(--bg-body); transition-delay: 0.1s;">
+                <div style="width: 60px; height: 60px; background: rgba(14, 165, 233, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--secondary); font-size: 1.5rem;">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Innovation</h3>
+                <p style="font-size: 0.95rem; color: var(--text-muted);">Faster booking, smarter results .</p>
+            </div>
+            <div class="card reveal" style="padding: 3rem; text-align: center; background: var(--bg-body); transition-delay: 0.2s;">
+                <div style="width: 60px; height: 60px; background: rgba(245, 158, 11, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--accent); font-size: 1.5rem;">
+                    <i class="fa-solid fa-earth-americas"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Global Reach</h3>
+                <p style="font-size: 0.95rem; color: var(--text-muted);">Our community spans the globe, respecting local cultures and traditions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="section">
+    <div class="container" style="text-align: center;">
+        <div class="reveal">
+            <h2 style="margin-bottom: 1.5rem;">Ready to Start Your Journey?</h2>
+            <p style="max-width: 600px; margin: 0 auto 2.5rem; color: var(--text-muted);">Join thousands of happy travelers who trust Bookaro for their premium booking needs.</p>
+            <div style="display: flex; gap: 1.5rem; justify-content: center;">
+                <a href="{% url 'signup' %}" class="btn btn-primary">Create Account</a>
+                <a href="{% url 'contact' %}" class="btn btn-outline">Contact Sales</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .align-center { align-items: center; }
+</style>
+{% endblock %}

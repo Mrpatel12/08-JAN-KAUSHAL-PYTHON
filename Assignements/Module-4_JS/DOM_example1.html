@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+<body>
+    <h1 style="text-align: center; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 
+    'Helvetica Neue', sans-serif ;"calculator</h1>
+    </h1>
+
+    <form action="">
+       <input type="number" id="t1" placeholder="Number1"><br><br>
+       <input type="number" id="t2" placeholder="Number2"><br><br>
+       <button onclick="btnsubmit()">Submit</button>
+    </form>
+
+    <script>
+        function btnsubmit(){
+            var n1=document.getElementById("t1").value
+            var n2=document.getElementById("t2").value
+            var ans= Number(n1)+ Number(n2)
+            alert("Sum"+ans)
+            alert("Sub"+ans)
+            alert("Mul"+ans)
+            alert("Div"+ans)
+        }
+    </script>
+</body>
+</html>

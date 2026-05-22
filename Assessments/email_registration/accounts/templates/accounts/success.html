@@ -1,0 +1,16 @@
+{% extends "accounts/base.html" %}
+{% block title %}Account Verified | NexusAuth{% endblock %}
+{% block meta_description %}Your NexusAuth account has been successfully created.{% endblock %}
+
+{% block content %}
+<div class="card success-card">
+  <div class="checkmark-circle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="checkmark-icon">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  </div>
+  <h2 class="title">Registration Complete</h2>
+  <p>Your account was created successfully. A confirmation SMS was dispatched to <strong>+91 {{ phone }}</strong>.</p>
+  <a href="{% url 'accounts:register' %}" class="btn-primary">Register Another User</a>
+</div>
+{% endblock %}
