@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 from .models import Accommodation, Flight, TravelPackage
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -30,14 +31,27 @@ def services_list(request):
     # Combine with common cities and remove duplicates
     all_cities = sorted(list(set(db_origins + db_destinations + COMMON_CITIES)))
     
+    def apply_search_filter(queryset, field_name, search_value):
+        search_value = search_value.strip()
+        if not search_value:
+            return queryset
+        query = Q(**{f"{field_name}__icontains": search_value})
+        if len(search_value) == 3 and search_value.isalpha():
+            query |= Q(**{f"{field_name}__icontains": f"({search_value.upper()})"})
+        if ',' in search_value:
+            partial = search_value.split(',')[0].strip()
+            if partial:
+                query |= Q(**{f"{field_name}__icontains": partial})
+        return queryset.filter(query)
+
     # Handle search filtering
     search_origin = request.GET.get('origin', '')
     search_dest = request.GET.get('destination', '')
     
     if search_origin:
-        flights = flights.filter(origin__icontains=search_origin)
+        flights = apply_search_filter(flights, 'origin', search_origin)
     if search_dest:
-        flights = flights.filter(destination__icontains=search_dest)
+        flights = apply_search_filter(flights, 'destination', search_dest)
     
     context = {
         'accommodations': accommodations,
@@ -57,14 +71,34 @@ def flights_list(request):
     elif flight_type == 'national':
         flights = flights.filter(is_international=False)
         
+    def apply_search_filter(queryset, field_name, search_value):
+        search_value = search_value.strip()
+        if not search_value:
+            return queryset
+        query = Q(**{f"{field_name}__icontains": search_value})
+        if len(search_value) == 3 and search_value.isalpha():
+            query |= Q(**{f"{field_name}__icontains": f"({search_value.upper()})"})
+        if ',' in search_value:
+            partial = search_value.split(',')[0].strip()
+            if partial:
+                query |= Q(**{f"{field_name}__icontains": partial})
+        return queryset.filter(query)
+
     search_origin = request.GET.get('origin', '')
     search_dest = request.GET.get('destination', '')
     if search_origin:
-        flights = flights.filter(origin__icontains=search_origin)
+        flights = apply_search_filter(flights, 'origin', search_origin)
     if search_dest:
-        flights = flights.filter(destination__icontains=search_dest)
+        flights = apply_search_filter(flights, 'destination', search_dest)
         
-    context = {'flights': flights, 'search_origin': search_origin, 'search_dest': search_dest, 'COMMON_CITIES': COMMON_CITIES}
+    matching_flights_count = flights.count()
+    context = {
+        'flights': flights,
+        'search_origin': search_origin,
+        'search_dest': search_dest,
+        'COMMON_CITIES': COMMON_CITIES,
+        'matching_flights_count': matching_flights_count,
+    }
     return render(request, 'services/flights.html', context)
 
 def accommodations_list(request):

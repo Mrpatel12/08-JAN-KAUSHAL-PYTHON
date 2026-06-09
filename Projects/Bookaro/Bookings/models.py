@@ -24,6 +24,8 @@ class Booking(models.Model):
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
     booking_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    selected_seat = models.CharField(max_length=10, blank=True, null=True, help_text="Selected seat for flight (e.g., 12A)")
+    room_type = models.CharField(max_length=50, blank=True, null=True, help_text="Room preferences or type")
 
     def __str__(self):
         return f"Booking #{self.id} by {self.user.username} - {self.status}"

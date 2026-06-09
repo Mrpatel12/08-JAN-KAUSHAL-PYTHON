@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from .forms import UserSignupForm, UserLoginForm, ContactForm, UserProfileForm, ProfilePictureForm
 from .models import EmailOTP, UserProfile
@@ -36,18 +37,23 @@ def signup_view(request):
             print(f"   >>> YOUR OTP IS: {otp} <<<")
             print("="*50 + "\n")
             
-            send_mail(
-                'Verify your Bookaro Account',
-                f'Your OTP for account verification is: {otp}',
-                None,
-                [user.email],
-                fail_silently=True,
-            )
-            print(f"DEBUG: send_mail called for {user.email}")
-            
-            request.session['unverified_user_id'] = user.id
-            messages.info(request, "Please enter the OTP sent to your email to verify your account.")
-            return redirect('verify_otp')
+            try:
+                send_mail(
+                    'Verify your Bookaro Account',
+                    f'Your OTP for account verification is: {otp}',
+                    settings.DEFAULT_FROM_EMAIL,
+                    [user.email],
+                    fail_silently=False,
+                )
+                print(f"DEBUG: send_mail called for {user.email}")
+
+                request.session['unverified_user_id'] = user.id
+                messages.info(request, "Please enter the OTP sent to your email to verify your account.")
+                return redirect('verify_otp')
+            except Exception as e:
+                print(f"ERROR sending OTP to {user.email}: {e}")
+                messages.error(request, "Failed to send verification email. Please check email settings or try again later.")
+                return redirect('signup')
         else:
             for error in form.errors.values():
                 messages.error(request, error)
@@ -128,18 +134,23 @@ def login_view(request):
                     print(f"   >>> YOUR OTP IS: {otp} <<<")
                     print("="*50 + "\n")
                     
-                    send_mail(
-                        subject,
-                        message,
-                        None,
-                        [user.email],
-                        fail_silently=True,
-                    )
-                    print(f"DEBUG: send_mail called for {user.email}")
-                    
-                    request.session['unverified_user_id'] = user.id
-                    messages.info(request, "A verification code has been sent to your email.")
-                    return redirect('verify_otp')
+                    try:
+                        send_mail(
+                            subject,
+                            message,
+                            settings.DEFAULT_FROM_EMAIL,
+                            [user.email],
+                            fail_silently=False,
+                        )
+                        print(f"DEBUG: send_mail called for {user.email}")
+
+                        request.session['unverified_user_id'] = user.id
+                        messages.info(request, "A verification code has been sent to your email.")
+                        return redirect('verify_otp')
+                    except Exception as e:
+                        print(f"ERROR sending OTP to {user.email}: {e}")
+                        messages.error(request, "Failed to send verification email. Please check email settings or try again later.")
+                        return redirect('login')
                 else:
                     messages.error(request, "Invalid username or password.")
             except User.DoesNotExist:
@@ -166,14 +177,18 @@ def resend_otp_view(request):
         otp = f"{random.randint(100000, 999999)}"
         EmailOTP.objects.update_or_create(user=user, defaults={'otp': otp})
         
-        send_mail(
-            'Your New Bookaro Verification Code',
-            f'Your new verification code is: {otp}',
-            None,
-            [user.email],
-            fail_silently=True,
-        )
-        messages.success(request, "A new verification code has been sent to your email.")
+        try:
+            send_mail(
+                'Your New Bookaro Verification Code',
+                f'Your new verification code is: {otp}',
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                fail_silently=False,
+            )
+            messages.success(request, "A new verification code has been sent to your email.")
+        except Exception as e:
+            print(f"ERROR resending OTP to {user.email}: {e}")
+            messages.error(request, "Failed to resend verification email. Please try again later.")
     except User.DoesNotExist:
         messages.error(request, "User not found.")
         return redirect('login')

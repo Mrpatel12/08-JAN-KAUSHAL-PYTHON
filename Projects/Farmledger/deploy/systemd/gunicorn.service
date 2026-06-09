@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve Farmledger
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/app
+Environment="PATH=/app/.venv/bin"
+ExecStart=/app/.venv/bin/gunicorn Farmledger.wsgi:application -b 127.0.0.1:8000 --workers 3
+
+[Install]
+WantedBy=multi-user.target

@@ -34,6 +34,20 @@ A professional Django project for managing services and bookings.
    python manage.py runserver
    ```
 
+## Flight Data Import
+
+To import global airline routes and flights using the OpenFlights dataset (prices stored in INR):
+
+```bash
+python manage.py import_openflights
+```
+
+Optional arguments:
+
+- `--max-routes <N>`: limit the number of imported routes for testing
+- `--skip-existing`: keep existing flights unchanged
+- `--verbose`: print progress during import
+
 ## License
 
 This project is licensed under the MIT License.

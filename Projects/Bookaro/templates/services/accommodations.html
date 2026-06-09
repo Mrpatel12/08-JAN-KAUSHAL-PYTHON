@@ -3,65 +3,260 @@
 
 {% block content %}
 <section class="section" style="background: var(--bg-main); padding-top: 8rem;">
-    <div class="container">
+    <div class="container" style="padding-bottom: 5rem;">
         <div class="page-header reveal" style="text-align: center; margin-bottom: 3rem;">
-            <h1 style="color: var(--text-main);">Luxury Stays</h1>
-            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Discover the perfect hotel or private villa for your next getaway.</p>
+            <h1 style="color: var(--text-main); font-weight: 800;">Luxury Stays</h1>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Discover the perfect hotel, private villa, or homestay for your next premium getaway.</p>
         </div>
 
-        <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem;" class="reveal">
-            <a href="?type=" class="btn {% if not request.GET.type %}btn-primary{% else %}btn-outline{% endif %}">All Stays</a>
-            <a href="?type=hotel" class="btn {% if request.GET.type == 'hotel' %}btn-primary{% else %}btn-outline{% endif %}">Hotels</a>
-            <a href="?type=villa" class="btn {% if request.GET.type == 'villa' %}btn-primary{% else %}btn-outline{% endif %}">Villas</a>
-        </div>
+        <!-- Layout Grid -->
+        <div style="display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start;">
+            
+            <!-- Filters Sidebar -->
+            <aside class="glass" style="border-radius: var(--radius-xl); padding: 1.75rem; border: 1px solid var(--border); position: sticky; top: 8rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                    <h4 style="margin: 0; color: var(--text-main); font-weight: 700;"><i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Filters</h4>
+                    <button id="reset-filters" style="background: none; border: none; color: var(--primary); font-weight: 700; font-size: 0.8rem; cursor: pointer;">Reset All</button>
+                </div>
 
-        <div class="property-grid">
-            {% for acc in accommodations %}
-            <div class="card property-card reveal" style="background: var(--bg-card); border: 1px solid var(--border);">
-                <div class="card-image-wrap">
-                    {% if acc.image %}
-                        <img src="{{ acc.image.url }}" alt="{{ acc.name }}">
-                    {% elif acc.image_url %}
-                        <img src="{{ acc.image_url }}" alt="{{ acc.name }}">
-                    {% else %}
-                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2670" alt="Default Hotel">
-                    {% endif %}
-                    <div class="badge">{{ acc.get_accommodation_type_display }}</div>
+                <!-- Price Slider -->
+                <div style="margin-bottom: 2rem;">
+                    <h5 style="margin: 0 0 0.75rem; color: var(--text-main); font-weight: 600; font-size: 0.95rem;">Price per Night</h5>
+                    <input type="range" id="price-range" min="0" max="150000" step="1000" value="150000" style="width: 100%; accent-color: var(--primary); cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-top: 0.5rem;">
+                        <span>₹0</span>
+                        <span id="price-display" style="color: var(--primary);">₹150,000</span>
+                    </div>
                 </div>
-                <div class="property-info">
-                    <div class="property-location" style="color: var(--primary);">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>{{ acc.location }}</span>
+
+                <!-- Star Rating Limit -->
+                <div style="margin-bottom: 2rem;">
+                    <h5 style="margin: 0 0 0.75rem; color: var(--text-main); font-weight: 600; font-size: 0.95rem;">Minimum Rating</h5>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="rating-btn active" data-rating="0" style="flex: 1; padding: 0.4rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer;">All</button>
+                        <button class="rating-btn" data-rating="3" style="flex: 1; padding: 0.4rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer;">3★+</button>
+                        <button class="rating-btn" data-rating="4" style="flex: 1; padding: 0.4rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer;">4★+</button>
+                        <button class="rating-btn" data-rating="4.5" style="flex: 1; padding: 0.4rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); font-size: 0.8rem; font-weight: 600; cursor: pointer;">4.5★+</button>
                     </div>
-                    <h3 class="property-name" style="color: var(--text-main);">{{ acc.name }}</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                        {{ acc.description }}
-                    </p>
-                    <div class="property-meta" style="margin-bottom: 1.5rem;">
-                        <div class="price" style="color: var(--text-main);">
-                            &#8377; {{ acc.price_per_night }} <span>/ night</span>
+                </div>
+
+                <!-- Stay Category Checkboxes -->
+                <div style="margin-bottom: 2rem;">
+                    <h5 style="margin: 0 0 0.75rem; color: var(--text-main); font-weight: 600; font-size: 0.95rem;">Property Type</h5>
+                    <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-main); cursor: pointer;">
+                            <input type="checkbox" class="cat-check" value="hotel" checked style="accent-color: var(--primary);"> Hotels
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-main); cursor: pointer;">
+                            <input type="checkbox" class="cat-check" value="villa" checked style="accent-color: var(--primary);"> Private Villas
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-main); cursor: pointer;">
+                            <input type="checkbox" class="cat-check" value="homestay" checked style="accent-color: var(--primary);"> Homestays
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Sorting Dropdown -->
+                <div>
+                    <h5 style="margin: 0 0 0.75rem; color: var(--text-main); font-weight: 600; font-size: 0.95rem;">Sort By</h5>
+                    <select id="sort-selector" style="width: 100%; padding: 0.6rem; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: var(--bg-card); color: var(--text-main); font-family: inherit; font-size: 0.9rem;">
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="rating-desc">Rating: Highest first</option>
+                    </select>
+                </div>
+            </aside>
+
+            <!-- Stay Grid Workspace -->
+            <div>
+                <div id="stays-grid" class="property-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                    {% for acc in accommodations %}
+                    <div class="card property-card reveal stay-card" 
+                         data-price="{{ acc.price_per_night }}" 
+                         data-rating="{{ acc.rating }}" 
+                         data-category="{{ acc.accommodation_type|lower }}"
+                         style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; display: flex; flex-direction: column; height: 100%; transition: all 0.3s ease;">
+                        
+                        <div class="card-image-wrap" style="position: relative; height: 220px; overflow: hidden;">
+                            {% if acc.image %}
+                                <img src="{{ acc.image.url }}" alt="{{ acc.name }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                            {% elif acc.image_url %}
+                                <img src="{{ acc.image_url }}" alt="{{ acc.name }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2670" alt="Default Hotel" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                            {% endif %}
+                            <div class="badge" style="position: absolute; top: 1rem; left: 1rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(15,23,42,0.7); backdrop-filter: blur(4px); color: white; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">
+                                {{ acc.get_accommodation_type_display }}
+                            </div>
                         </div>
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <span>{{ acc.rating }}</span>
+                        
+                        <div class="property-info" style="padding: 1.5rem; display: flex; flex-direction: column; flex: 1;">
+                            <div class="property-location" style="color: var(--primary); font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.5rem;">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>{{ acc.location }}</span>
+                            </div>
+                            <h3 class="property-name" style="color: var(--text-main); font-weight: 800; font-size: 1.25rem; margin: 0 0 0.75rem;">{{ acc.name }}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 1.5rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1;">
+                                {{ acc.description }}
+                            </p>
+                            
+                            <div class="property-meta" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 1rem;">
+                                <div class="price" style="color: var(--text-main); font-weight: 800; font-size: 1.25rem;">
+                                    ₹{{ acc.price_per_night }} <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">/ night</span>
+                                </div>
+                                <div class="rating" style="display: flex; align-items: center; gap: 0.25rem; color: var(--accent); font-weight: 700;">
+                                    <i class="fa-solid fa-star"></i>
+                                    <span style="color: var(--text-main);">{{ acc.rating }}</span>
+                                </div>
+                            </div>
+                            
+                            <form action="{% url 'checkout' %}" method="POST" style="margin: 0;">
+                                {% csrf_token %}
+                                <input type="hidden" name="service_type" value="ACCOMMODATION">
+                                <input type="hidden" name="service_id" value="{{ acc.id }}">
+                                <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; border-radius: var(--radius-md);">Reserve Suite</button>
+                            </form>
                         </div>
                     </div>
-                    
-                    <form action="{% url 'checkout' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="service_type" value="ACCOMMODATION">
-                        <input type="hidden" name="service_id" value="{{ acc.id }}">
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Book Now</button>
-                    </form>
+                    {% endfor %}
+                </div>
+
+                <!-- Fallback empty view for JS filter results -->
+                <div id="js-empty-view" style="display: none; text-align: center; padding: 5rem 2rem; background: var(--bg-card); border-radius: var(--radius-xl); border: 1px solid var(--border);">
+                    <i class="fa-solid fa-hotel" style="font-size: 3.5rem; color: var(--slate-200); margin-bottom: 1.5rem; display: block;"></i>
+                    <p style="color: var(--text-muted); font-weight: 600; font-size: 1.1rem; margin: 0 0 0.5rem;">No properties found</p>
+                    <p style="color: var(--slate-400); font-size: 0.9rem; margin: 0;">Try adjusting your price range or rating selection in the filters sidebar.</p>
                 </div>
             </div>
-            {% empty %}
-            <div style="grid-column: 1/-1; text-align: center; padding: 4rem; background: var(--bg-card); border-radius: var(--radius-xl); border: 1px solid var(--border);">
-                <i class="fa-solid fa-hotel" style="font-size: 3rem; color: var(--slate-200); margin-bottom: 1rem; display: block;"></i>
-                <p style="color: var(--text-muted);">No stays found.</p>
-            </div>
-            {% endfor %}
+            
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const grid = document.getElementById("stays-grid");
+        const cards = Array.from(document.querySelectorAll(".stay-card"));
+        const priceRange = document.getElementById("price-range");
+        const priceDisplay = document.getElementById("price-display");
+        const ratingBtns = document.querySelectorAll(".rating-btn");
+        const catCheckboxes = document.querySelectorAll(".cat-check");
+        const sortSelector = document.getElementById("sort-selector");
+        const resetBtn = document.getElementById("reset-filters");
+        const jsEmptyView = document.getElementById("js-empty-view");
+
+        if (cards.length === 0) return;
+
+        let activeMinRating = 0;
+        let maxPrice = 0;
+        
+        cards.forEach(card => {
+            const price = parseFloat(card.getAttribute("data-price"));
+            if (price > maxPrice) maxPrice = price;
+        });
+
+        // Set range max bounds
+        priceRange.max = Math.ceil(maxPrice / 1000) * 1000;
+        priceRange.value = priceRange.max;
+        priceDisplay.innerText = "₹" + Number(priceRange.value).toLocaleString('en-IN');
+
+        const updateFilters = () => {
+            const currentPriceLimit = parseFloat(priceRange.value);
+            priceDisplay.innerText = "₹" + currentPriceLimit.toLocaleString('en-IN');
+
+            const activeCats = Array.from(catCheckboxes).filter(c => c.checked).map(c => c.value);
+            
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const price = parseFloat(card.getAttribute("data-price"));
+                const rating = parseFloat(card.getAttribute("data-rating"));
+                const category = card.getAttribute("data-category");
+
+                const matchesPrice = price <= currentPriceLimit;
+                const matchesRating = rating >= activeMinRating;
+                const matchesCategory = activeCats.includes(category);
+
+                if (matchesPrice && matchesRating && matchesCategory) {
+                    card.style.display = "flex";
+                    visibleCount++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            if (visibleCount === 0) {
+                grid.style.display = "none";
+                jsEmptyView.style.display = "block";
+            } else {
+                grid.style.display = "grid";
+                jsEmptyView.style.display = "none";
+            }
+        };
+
+        const sortCards = () => {
+            const sortBy = sortSelector.value;
+            const sortedCards = [...cards];
+
+            sortedCards.sort((a, b) => {
+                if (sortBy === "price-asc") {
+                    return parseFloat(a.getAttribute("data-price")) - parseFloat(b.getAttribute("data-price"));
+                } else if (sortBy === "price-desc") {
+                    return parseFloat(b.getAttribute("data-price")) - parseFloat(a.getAttribute("data-price"));
+                } else if (sortBy === "rating-desc") {
+                    return parseFloat(b.getAttribute("data-rating")) - parseFloat(a.getAttribute("data-rating"));
+                }
+                return 0;
+            });
+
+            sortedCards.forEach(card => grid.appendChild(card));
+        };
+
+        // Attach listeners
+        priceRange.addEventListener("input", updateFilters);
+        
+        ratingBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                ratingBtns.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                activeMinRating = parseFloat(btn.getAttribute("data-rating"));
+                updateFilters();
+            });
+        });
+
+        catCheckboxes.forEach(cb => cb.addEventListener("change", updateFilters));
+        sortSelector.addEventListener("change", sortCards);
+
+        resetBtn.addEventListener("click", () => {
+            priceRange.value = priceRange.max;
+            ratingBtns.forEach(b => b.classList.remove("active"));
+            ratingBtns[0].classList.add("active");
+            activeMinRating = 0;
+            catCheckboxes.forEach(c => c.checked = true);
+            sortSelector.selectedIndex = 0;
+            updateFilters();
+            sortCards();
+        });
+
+        // Init
+        sortCards();
+        updateFilters();
+    });
+</script>
+
+<style>
+    /* Premium Hover effect on stay cards */
+    .stay-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-xl);
+    }
+    .stay-card:hover img {
+        transform: scale(1.08);
+    }
+    .rating-btn.active {
+        background: var(--primary) !important;
+        color: white !important;
+        border-color: var(--primary) !important;
+    }
+</style>
 {% endblock %}

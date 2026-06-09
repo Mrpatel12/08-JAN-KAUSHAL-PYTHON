@@ -1,79 +1,234 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Checkout | Bookaro{% endblock %}
+{% block title %}Secure Checkout | Bookaro{% endblock %}
 
 {% block content %}
-<section class="section" style="min-height: 80vh; display: flex; align-items: center; background: var(--bg-main);">
-    <div class="container" style="max-width: 600px;">
-        <div class="card p-4" style="background: var(--bg-card); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); border: 1px solid var(--border);">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <h2 style="font-size: 2rem; color: var(--text-main);">Confirm Your Booking</h2>
-                <p style="color: var(--text-muted);">Please review your details before making the payment.</p>
-            </div>
+<div style="min-height: 100vh; padding-top: 7rem; background: linear-gradient(135deg, var(--bg-body) 0%, var(--slate-100) 100%);">
+    <div class="container" style="padding-bottom: 5rem;">
+        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem; align-items: start;">
             
-            <div style="background: rgba(79, 70, 229, 0.05); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem; border: 1px dashed var(--primary-light);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
-                    <span style="color: var(--text-muted); font-weight: 500;">Service Type</span>
-                    <span style="color: var(--text-main); font-weight: 600;">{{ booking.get_service_type_display }}</span>
-                </div>
-                
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
-                    <span style="color: var(--text-muted); font-weight: 500;">Details</span>
-                    <span style="color: var(--text-main); font-weight: 600; text-align: right;">
+            <!-- Left Panel: Interactive Preferences -->
+            <div class="glass" style="border-radius: var(--radius-2xl); padding: 2.5rem; border: 1px solid var(--border);">
+                <h2 style="margin-bottom: 0.5rem; color: var(--text-main); font-weight: 800;">Customize Your Travel</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">Personalize your luxury experience with Bookaro custom preferences.</p>
+
+                <!-- Service Info Summary -->
+                <div style="display: flex; gap: 1.5rem; background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-xl); border: 1px solid var(--border); margin-bottom: 2rem; align-items: center;">
+                    <div style="width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
                         {% if booking.service_type == 'FLIGHT' %}
-                            {{ booking.flight.airline }} - {{ booking.flight.flight_number }}<br>
-                            <small>{{ booking.flight.origin }} &rarr; {{ booking.flight.destination }}</small>
+                            background: rgba(79, 70, 229, 0.1); color: var(--primary);
                         {% elif booking.service_type == 'ACCOMMODATION' %}
-                            {{ booking.accommodation.name }}<br>
-                            <small>{{ booking.accommodation.location }}</small>
-                        {% elif booking.service_type == 'PACKAGE' %}
-                            {{ booking.package.name }}
+                            background: rgba(16, 185, 129, 0.1); color: #10b981;
+                        {% else %}
+                            background: rgba(14, 165, 233, 0.1); color: var(--secondary);
                         {% endif %}
-                    </span>
+                    ">
+                        {% if booking.service_type == 'FLIGHT' %}
+                            <i class="fa-solid fa-plane"></i>
+                        {% elif booking.service_type == 'ACCOMMODATION' %}
+                            <i class="fa-solid fa-hotel"></i>
+                        {% else %}
+                            <i class="fa-solid fa-suitcase"></i>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h4 style="margin: 0; color: var(--text-main); font-size: 1.1rem; font-weight: 700;">
+                            {% if booking.service_type == 'FLIGHT' %}
+                                {{ booking.flight.airline }} ({{ booking.flight.flight_number }})
+                            {% elif booking.service_type == 'ACCOMMODATION' %}
+                                {{ booking.accommodation.name }}
+                            {% else %}
+                                {{ booking.package.name }}
+                            {% endif %}
+                        </h4>
+                        <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.85rem;">
+                            {% if booking.service_type == 'FLIGHT' %}
+                                {{ booking.flight.origin }} &rarr; {{ booking.flight.destination }} | {{ booking.flight.departure_time|date:"d M Y, H:i" }}
+                            {% elif booking.service_type == 'ACCOMMODATION' %}
+                                {{ booking.accommodation.location }} | Star Rating: {{ booking.accommodation.rating }} &starf;
+                            {% else %}
+                                {{ booking.package.destinations }} | {{ booking.package.duration_days }} Days Tour
+                            {% endif %}
+                        </p>
+                    </div>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; font-size: 1.25rem;">
-                    <span style="color: var(--text-main); font-weight: 700;">Total Amount</span>
-                    <span style="color: var(--primary); font-weight: 800;">&#8377; {{ booking.total_amount }}</span>
-                </div>
+
+                {% if booking.service_type == 'FLIGHT' %}
+                    <!-- Interactive Flight Seat Map -->
+                    <div style="margin-top: 2rem;">
+                        <h3 style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-chair" style="color: var(--primary);"></i> Select Your Flight Seat
+                        </h3>
+                        
+                        <!-- Seat Map Container -->
+                        <div style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-xl); border: 1px solid var(--border); max-width: 480px; margin: 0 auto; box-shadow: var(--shadow-sm);">
+                            <div style="width: 100%; height: 25px; border-radius: 50% 50% 0 0; border: 2px solid var(--border); border-bottom: none; text-align: center; font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 2rem; background: var(--slate-50); line-height: 25px;">
+                                FLIGHT FRONT / COCKPIT
+                            </div>
+
+                            <div style="display: flex; justify-content: center; gap: 0.75rem; margin-bottom: 1.5rem; font-weight: 700; font-size: 0.8rem; color: var(--text-muted);">
+                                <div style="width: 32px; text-align: center;">A</div>
+                                <div style="width: 32px; text-align: center;">B</div>
+                                <div style="width: 32px; text-align: center;">C</div>
+                                <div style="width: 20px;"></div> <!-- Aisle -->
+                                <div style="width: 32px; text-align: center;">D</div>
+                                <div style="width: 32px; text-align: center;">E</div>
+                                <div style="width: 32px; text-align: center;">F</div>
+                            </div>
+
+                            <div id="seat-grid" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <!-- Loop 6 rows for selection -->
+                                {% for row in "123456" %}
+                                    <div style="display: flex; justify-content: center; gap: 0.75rem; align-items: center;">
+                                        <div class="seat" data-seat="{{ row }}A" style="width: 32px; height: 32px; border-radius: 6px; background: rgba(79, 70, 229, 0.08); border: 1px solid rgba(79, 70, 229, 0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: var(--primary); transition: all 0.2s;">{{ row }}A</div>
+                                        <div class="seat taken" style="width: 32px; height: 32px; border-radius: 6px; background: var(--slate-200); border: 1px solid var(--border); cursor: not-allowed; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); opacity: 0.5;">{{ row }}B</div>
+                                        <div class="seat" data-seat="{{ row }}C" style="width: 32px; height: 32px; border-radius: 6px; background: rgba(79, 70, 229, 0.08); border: 1px solid rgba(79, 70, 229, 0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: var(--primary); transition: all 0.2s;">{{ row }}C</div>
+                                        
+                                        <!-- Row Number in Aisle -->
+                                        <div style="width: 20px; text-align: center; font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">{{ row }}</div>
+                                        
+                                        <div class="seat" data-seat="{{ row }}D" style="width: 32px; height: 32px; border-radius: 6px; background: rgba(79, 70, 229, 0.08); border: 1px solid rgba(79, 70, 229, 0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: var(--primary); transition: all 0.2s;">{{ row }}D</div>
+                                        <div class="seat" data-seat="{{ row }}E" style="width: 32px; height: 32px; border-radius: 6px; background: rgba(79, 70, 229, 0.08); border: 1px solid rgba(79, 70, 229, 0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: var(--primary); transition: all 0.2s;">{{ row }}E</div>
+                                        <div class="seat taken" style="width: 32px; height: 32px; border-radius: 6px; background: var(--slate-200); border: 1px solid var(--border); cursor: not-allowed; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); opacity: 0.5;">{{ row }}F</div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Legend -->
+                            <div style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 2rem; font-size: 0.8rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                    <div style="width: 14px; height: 14px; border-radius: 3px; background: rgba(79, 70, 229, 0.08); border: 1px solid rgba(79, 70, 229, 0.2);"></div> Available
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                    <div style="width: 14px; height: 14px; border-radius: 3px; background: var(--primary);"></div> Selected
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                    <div style="width: 14px; height: 14px; border-radius: 3px; background: var(--slate-200); opacity: 0.5;"></div> Booked
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% elif booking.service_type == 'ACCOMMODATION' %}
+                    <!-- Stay Room Configuration -->
+                    <div style="margin-top: 2rem;">
+                        <h3 style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-bed" style="color: var(--primary);"></i> Choose Room Preferences
+                        </h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div class="pref-card active" data-pref="King Bed Luxury Suite" style="border: 2px solid var(--primary); background: rgba(79,70,229,0.03); border-radius: var(--radius-xl); padding: 1.25rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: var(--transition);">
+                                <div>
+                                    <h5 style="margin: 0 0 0.25rem; color: var(--text-main); font-weight: 700; font-size: 1rem;">King Bed Luxury Suite</h5>
+                                    <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">One extra large double bed, panoramic garden view.</p>
+                                </div>
+                                <div style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; color: white; background: var(--primary); font-size: 0.65rem;">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </div>
+
+                            <div class="pref-card" data-pref="Twin Beds High Floor" style="border: 1px solid var(--border); background: var(--bg-card); border-radius: var(--radius-xl); padding: 1.25rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: var(--transition);">
+                                <div>
+                                    <h5 style="margin: 0 0 0.25rem; color: var(--text-main); font-weight: 700; font-size: 1rem;">Twin Beds High Floor</h5>
+                                    <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">Two single beds, high-floor skyline views.</p>
+                                </div>
+                                <div style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border);"></div>
+                            </div>
+
+                            <div class="pref-card" data-pref="Executive Honeymoon Villa" style="border: 1px solid var(--border); background: var(--bg-card); border-radius: var(--radius-xl); padding: 1.25rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: var(--transition);">
+                                <div>
+                                    <h5 style="margin: 0 0 0.25rem; color: var(--text-main); font-weight: 700; font-size: 1rem;">Executive Honeymoon Villa</h5>
+                                    <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">Detached private balcony, complimentary minibar access.</p>
+                                </div>
+                                <div style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border);"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Package details upgrade option -->
+                    <div style="margin-top: 2rem;">
+                        <h3 style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-circle-nodes" style="color: var(--primary);"></i> Inclusions & Addons
+                        </h3>
+                        <div style="background: rgba(14, 165, 233, 0.05); border-left: 4px solid var(--secondary); padding: 1.25rem; border-radius: 0 var(--radius-lg) var(--radius-lg) 0;">
+                            <h5 style="margin: 0 0 0.25rem; color: var(--text-main); font-weight: 700;">Premium Package Extras Include:</h5>
+                            <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                                <li>5-Star Accommodation stay throughout</li>
+                                <li>Complimentary airport pickup & transfer</li>
+                                <li>Private guided sightseeing tours</li>
+                                <li>24/7 dedicated support representative</li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
 
-            <form action="{% url 'payment_success' %}" method="POST" id="razorpay-form">
-                <script
-                    src="https://checkout.razorpay.com/v1/checkout.js"
-                    data-key="{{ razorpay_merchant_key }}"
-                    data-amount="{{ amount_in_paise }}"
-                    data-currency="{{ currency }}"
-                    data-order_id="{{ razorpay_order_id }}"
-                    data-buttontext="Pay with Razorpay"
-                    data-name="Bookaro Premium"
-                    data-description="{{ booking.get_service_type_display }} Booking"
-                    data-image="https://via.placeholder.com/150/4f46e5/ffffff?text=B"
-                    data-prefill.name="{{ request.user.get_full_name|default:request.user.username }}"
-                    data-prefill.email="{{ request.user.email }}"
-                    data-theme.color="#4f46e5"
-                ></script>
-                <input type="hidden" custom="Hidden Element" name="hidden">
-            </form>
+            <!-- Right Panel: Summary & Razorpay Trigger -->
+            <div class="glass" style="border-radius: var(--radius-2xl); padding: 2.5rem; border: 1px solid var(--border); background: var(--bg-card); position: sticky; top: 8rem;">
+                <h3 style="margin-top: 0; margin-bottom: 1.5rem; color: var(--text-main); font-weight: 800; font-size: 1.35rem;">Fare Summary</h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Base Fare</span>
+                        <strong style="color: var(--text-main);">₹{{ booking.total_amount }}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Taxes & Fees</span>
+                        <strong style="color: var(--text-main);">₹0.00</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.15rem; border-top: 1px dashed var(--border); padding-top: 1rem; margin-top: 0.5rem;">
+                        <span style="color: var(--text-main); font-weight: 700;">Total Amount</span>
+                        <strong style="color: var(--primary); font-weight: 800;">₹{{ booking.total_amount }}</strong>
+                    </div>
+                </div>
+
+                <!-- Preference selection text display -->
+                <div id="selection-details-box" style="display: none; background: rgba(79, 70, 229, 0.03); border: 1px solid rgba(79, 70, 229, 0.1); border-radius: var(--radius-lg); padding: 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                    <i class="fa-solid fa-sparkles" style="color: var(--accent); margin-right: 0.25rem;"></i>
+                    Selected Selection: <strong id="selection-display-val" style="color: var(--primary);">None</strong>
+                </div>
+
+                <form action="{% url 'payment_success' %}" method="POST" id="razorpay-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="selected_seat" id="selected_seat_input" value="">
+                    <input type="hidden" name="room_type" id="room_type_input" value="">
+                    
+                    <script
+                        src="https://checkout.razorpay.com/v1/checkout.js"
+                        data-key="{{ razorpay_merchant_key }}"
+                        data-amount="{{ amount_in_paise }}"
+                        data-currency="{{ currency }}"
+                        data-order_id="{{ razorpay_order_id }}"
+                        data-buttontext="Confirm & Pay Now"
+                        data-name="Bookaro Premium"
+                        data-description="{{ booking.get_service_type_display }} Booking"
+                        data-image="https://via.placeholder.com/150/4f46e5/ffffff?text=B"
+                        data-prefill.name="{{ request.user.get_full_name|default:request.user.username }}"
+                        data-prefill.email="{{ request.user.email }}"
+                        data-theme.color="#4f46e5"
+                    ></script>
+                    <input type="hidden" name="razorpay_order_id" value="{{ razorpay_order_id }}">
+                </form>
+                
+                <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; color: #10b981; font-size: 0.85rem; font-weight: 700;">
+                    <i class="fa-solid fa-shield-halved"></i> 256-Bit SSL Secured Checkout
+                </div>
+            </div>
             
-            <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">
-                <i class="fa-solid fa-lock" style="margin-right: 0.25rem;"></i> Secure Encrypted Payment
-            </p>
         </div>
     </div>
-</section>
+</div>
 
 <style>
     /* Styling the Razorpay button to match our theme */
     .razorpay-payment-button {
         width: 100%;
-        padding: 1rem !important;
+        padding: 1.1rem !important;
         background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
         color: white !important;
         border: none !important;
-        border-radius: var(--radius-lg) !important;
-        font-weight: 600 !important;
+        border-radius: var(--radius-xl) !important;
+        font-weight: 700 !important;
         font-size: 1.1rem !important;
         cursor: pointer !important;
         transition: transform 0.2s, box-shadow 0.2s !important;
@@ -83,5 +238,91 @@
         transform: translateY(-2px) !important;
         box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3) !important;
     }
+    .seat:hover:not(.taken) {
+        background: var(--primary) !important;
+        color: white !important;
+        transform: scale(1.1);
+    }
+    .seat.selected {
+        background: var(--primary) !important;
+        color: white !important;
+        box-shadow: 0 0 8px var(--primary-light);
+    }
+    
+    .pref-card:hover:not(.active) {
+        border-color: var(--primary-light) !important;
+        background: rgba(79,70,229,0.01) !important;
+    }
 </style>
+
+<script>
+    // JS Logic for Flight seat selector or stay room card toggle
+    document.addEventListener("DOMContentLoaded", () => {
+        const type = "{{ booking.service_type }}";
+        
+        if (type === "FLIGHT") {
+            const seats = document.querySelectorAll(".seat[data-seat]");
+            const seatInput = document.getElementById("selected_seat_input");
+            const box = document.getElementById("selection-details-box");
+            const valDisplay = document.getElementById("selection-display-val");
+            
+            seats.forEach(seat => {
+                seat.addEventListener("click", () => {
+                    // Remove active from others
+                    seats.forEach(s => s.classList.remove("selected"));
+                    
+                    // Add active to clicked
+                    seat.classList.add("selected");
+                    
+                    const seatNum = seat.getAttribute("data-seat");
+                    seatInput.value = seatNum;
+                    
+                    box.style.display = "block";
+                    valDisplay.innerText = "Flight Seat " + seatNum;
+                });
+            });
+        } else if (type === "ACCOMMODATION") {
+            const prefCards = document.querySelectorAll(".pref-card");
+            const roomInput = document.getElementById("room_type_input");
+            const box = document.getElementById("selection-details-box");
+            const valDisplay = document.getElementById("selection-display-val");
+            
+            // Set default room choice on load
+            roomInput.value = "King Bed Luxury Suite";
+            box.style.display = "block";
+            valDisplay.innerText = "King Bed Luxury Suite";
+
+            prefCards.forEach(card => {
+                card.addEventListener("click", () => {
+                    prefCards.forEach(c => {
+                        c.classList.remove("active");
+                        c.style.border = "1px solid var(--border)";
+                        c.style.background = "var(--bg-card)";
+                        const dot = c.querySelector("div:last-child");
+                        dot.innerHTML = "";
+                        dot.style.background = "transparent";
+                    });
+                    
+                    card.classList.add("active");
+                    card.style.border = "2px solid var(--primary)";
+                    card.style.background = "rgba(79,70,229,0.03)";
+                    const dot = card.querySelector("div:last-child");
+                    dot.innerHTML = '<i class="fa-solid fa-check"></i>';
+                    dot.style.background = "var(--primary)";
+                    dot.style.display = "flex";
+                    dot.style.alignItems = "center";
+                    dot.style.justifyContent = "center";
+                    dot.style.color = "white";
+                    dot.style.fontSize = "0.65rem";
+                    
+                    const prefVal = card.getAttribute("data-pref");
+                    roomInput.value = prefVal;
+                    
+                    box.style.display = "block";
+                    valDisplay.innerText = prefVal;
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}

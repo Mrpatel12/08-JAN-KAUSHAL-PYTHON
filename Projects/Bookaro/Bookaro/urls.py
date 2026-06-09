@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from Accounts import views as accounts_views
 from Services import views as services_views
 from Bookings import views as bookings_views
+from Dashboard import views as dashboard_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,6 +40,8 @@ urlpatterns = [
     path('login/', accounts_views.login_view, name='login'),
     path('logout/', accounts_views.logout_view, name='logout'),
     path('contact/', accounts_views.contact_view, name='contact'),
+    path('dashboard/', dashboard_views.dashboard_view, name='dashboard'),
+    path('bookings/cancel/<int:booking_id>/', dashboard_views.cancel_booking_view, name='cancel_booking'),
 ]
 
 if settings.DEBUG:

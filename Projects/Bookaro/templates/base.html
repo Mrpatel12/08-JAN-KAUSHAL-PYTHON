@@ -34,6 +34,9 @@
             
             <ul class="nav-links" id="nav-links">
                 <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a></li>
+                {% endif %}
                 <li><a href="{% url 'flights_list' %}" class="{% if request.resolver_match.url_name == 'flights_list' %}active{% endif %}">Flights</a></li>
                 <li><a href="{% url 'accommodations_list' %}" class="{% if request.resolver_match.url_name == 'accommodations_list' %}active{% endif %}">Stays</a></li>
                 <li><a href="{% url 'packages_list' %}" class="{% if request.resolver_match.url_name == 'packages_list' %}active{% endif %}">Packages</a></li>
@@ -47,6 +50,7 @@
                 
                 {% if user.is_authenticated %}
                     <div class="user-menu">
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline btn-sm" style="margin-right: 0.5rem;"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
                         <a href="{% url 'edit_profile' %}" class="user-profile">
                             {% if user.profile.avatar %}
                                 <img src="{{ user.profile.avatar.url }}" alt="Profile" class="nav-avatar">
@@ -314,5 +318,154 @@
         window.addEventListener('scroll', reveal);
         reveal();
     </script>
+
+    <!-- AI Concierge Widget -->
+    <div id="ai-chat-widget" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; font-family: inherit;">
+        <!-- Chat Toggle Bubble -->
+        <button id="ai-chat-toggle" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; cursor: pointer; box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: transform 0.3s ease; position: relative;">
+            <i class="fa-solid fa-comments" id="ai-chat-icon"></i>
+            <span style="position: absolute; top: -2px; right: -2px; width: 14px; height: 14px; background: #10b981; border: 2.5px solid white; border-radius: 50%;"></span>
+        </button>
+
+        <!-- Chat Window Panel -->
+        <div id="ai-chat-window" class="glass" style="display: none; width: 360px; height: 500px; border-radius: var(--radius-xl); border: 1px solid var(--border); background: var(--bg-card); box-shadow: var(--shadow-xl); flex-direction: column; overflow: hidden; position: absolute; bottom: 75px; right: 0; transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+            <!-- Header -->
+            <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 1.25rem; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.02em;">Bookaro Concierge</h4>
+                        <span style="font-size: 0.75rem; color: rgba(255,255,255,0.8); display: flex; align-items: center; gap: 0.25rem;">
+                            <span style="width: 6px; height: 6px; background: #10b981; border-radius: 50%; display: inline-block;"></span> Active AI Assistant
+                        </span>
+                    </div>
+                </div>
+                <button id="ai-chat-close" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; opacity: 0.8; transition: opacity 0.2s;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Messages Body -->
+            <div id="ai-chat-messages" style="flex: 1; padding: 1.25rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; font-size: 0.88rem; background: rgba(15,23,42,0.01);">
+                <div class="ai-msg" style="align-self: flex-start; max-width: 80%; background: var(--slate-100); color: var(--text-main); padding: 0.75rem 1rem; border-radius: 0 12px 12px 12px; line-height: 1.4; border: 1px solid var(--border);">
+                    Hello! I am your luxury concierge copilot. How can I help make your journey exceptional today?
+                </div>
+            </div>
+
+            <!-- Chips / Quick prompts -->
+            <div style="padding: 0.5rem 1.25rem; display: flex; gap: 0.5rem; flex-wrap: wrap; border-top: 1px solid var(--border); background: var(--bg-card);">
+                <button class="ai-chip" data-query="Suggest Stays" style="background: var(--slate-50); border: 1px solid var(--border); border-radius: 15px; padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; color: var(--primary); cursor: pointer; transition: all 0.2s;">Suggest Stays</button>
+                <button class="ai-chip" data-query="Cancel Policy" style="background: var(--slate-50); border: 1px solid var(--border); border-radius: 15px; padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; color: var(--primary); cursor: pointer; transition: all 0.2s;">Cancel Policy</button>
+                <button class="ai-chip" data-query="Earn Points" style="background: var(--slate-50); border: 1px solid var(--border); border-radius: 15px; padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; color: var(--primary); cursor: pointer; transition: all 0.2s;">Earn Points</button>
+            </div>
+
+            <!-- Input Footer -->
+            <div style="padding: 0.75rem 1.25rem; border-top: 1px solid var(--border); display: flex; gap: 0.5rem; background: var(--bg-card); align-items: center;">
+                <input type="text" id="ai-chat-input" placeholder="Type your request..." style="flex: 1; padding: 0.6rem 0.9rem; border-radius: var(--radius-md); border: 1.5px solid var(--border); font-family: inherit; font-size: 0.88rem; background: var(--bg-body); color: var(--text-main); outline: none;">
+                <button id="ai-chat-send" style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;"><i class="fa-solid fa-paper-plane" style="font-size: 0.9rem;"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleBtn = document.getElementById("ai-chat-toggle");
+            const closeBtn = document.getElementById("ai-chat-close");
+            const chatWindow = document.getElementById("ai-chat-window");
+            const messagesContainer = document.getElementById("ai-chat-messages");
+            const inputField = document.getElementById("ai-chat-input");
+            const sendBtn = document.getElementById("ai-chat-send");
+            const chips = document.querySelectorAll(".ai-chip");
+
+            // Open/close panel
+            toggleBtn.addEventListener("click", () => {
+                if (chatWindow.style.display === "none") {
+                    chatWindow.style.display = "flex";
+                    toggleBtn.style.transform = "scale(0.9) rotate(90deg)";
+                } else {
+                    chatWindow.style.display = "none";
+                    toggleBtn.style.transform = "scale(1) rotate(0deg)";
+                }
+            });
+
+            closeBtn.addEventListener("click", () => {
+                chatWindow.style.display = "none";
+                toggleBtn.style.transform = "scale(1) rotate(0deg)";
+            });
+
+            // Send message logic
+            const appendMessage = (text, isUser = false) => {
+                const bubble = document.createElement("div");
+                bubble.style.maxWidth = "80%";
+                bubble.style.padding = "0.75rem 1rem";
+                bubble.style.lineHeight = "1.4";
+                
+                if (isUser) {
+                    bubble.style.alignSelf = "flex-end";
+                    bubble.style.background = "var(--primary)";
+                    bubble.style.color = "white";
+                    bubble.style.borderRadius = "12px 0 12px 12px";
+                    bubble.style.border = "none";
+                } else {
+                    bubble.style.alignSelf = "flex-start";
+                    bubble.style.background = "var(--slate-100)";
+                    bubble.style.color = "var(--text-main)";
+                    bubble.style.borderRadius = "0 12px 12px 12px";
+                    bubble.style.border = "1px solid var(--border)";
+                }
+
+                bubble.innerText = text;
+                messagesContainer.appendChild(bubble);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            };
+
+            const processAIResponse = (userQuery) => {
+                const query = userQuery.toLowerCase();
+                let reply = "";
+
+                if (query.includes("stay") || query.includes("hotel") || query.includes("villa") || query.includes("resort") || query.includes("accommodation")) {
+                    reply = "Check out our Stays collection! We offer premium options like King Bed Luxury Suites and private beachfront villas. Click 'Stays' in the navigation bar to find the perfect getaway.";
+                } else if (query.includes("flight") || query.includes("airline") || query.includes("seat")) {
+                    reply = "We offer national and international flights with premium airlines. You can select your preferred seat directly on our visual map during checkout!";
+                } else if (query.includes("cancel") || query.includes("refund") || query.includes("policy")) {
+                    reply = "You can cancel any booking directly from your Dashboard. Refunds are processed securely to your payment card according to each property's cancel policy.";
+                } else if (query.includes("point") || query.includes("reward") || query.includes("earn")) {
+                    reply = "You earn 10 reward points for every ₹100 spent on confirmed journeys. Check your total points right in the premium Dashboard!";
+                } else if (query.includes("package") || query.includes("tour")) {
+                    reply = "Our curated travel packages offer 5-star stays, tour guides, and private transport. Explore the packages list in the navigation bar to book your dream itinerary.";
+                } else {
+                    reply = "I am happy to assist you with bookings, flights, stays, or dashboard configurations. Let me know if you need any links or support!";
+                }
+
+                // Simulate slight delay for typing indicator
+                setTimeout(() => {
+                    appendMessage(reply, false);
+                }, 400);
+            };
+
+            const handleSend = () => {
+                const text = inputField.value.trim();
+                if (!text) return;
+                appendMessage(text, true);
+                inputField.value = "";
+                processAIResponse(text);
+            };
+
+            sendBtn.addEventListener("click", handleSend);
+            inputField.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") handleSend();
+            });
+
+            // Quick reply chips
+            chips.forEach(chip => {
+                chip.addEventListener("click", () => {
+                    const query = chip.getAttribute("data-query");
+                    appendMessage(query, true);
+                    processAIResponse(query);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
+

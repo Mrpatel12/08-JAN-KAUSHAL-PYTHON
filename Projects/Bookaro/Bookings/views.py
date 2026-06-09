@@ -79,6 +79,14 @@ def payment_success_view(request):
             
             booking = payment.booking
             booking.status = 'CONFIRMED'
+            
+            selected_seat = request.POST.get('selected_seat')
+            room_type = request.POST.get('room_type')
+            if selected_seat:
+                booking.selected_seat = selected_seat
+            if room_type:
+                booking.room_type = room_type
+                
             booking.save()
             
             return render(request, 'bookings/success.html', {'booking': booking})

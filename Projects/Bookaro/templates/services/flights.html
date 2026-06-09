@@ -4,32 +4,40 @@
 {% block content %}
 <section class="section" style="background: var(--bg-main); padding-top: 8rem;">
     <div class="container">
-        <div class="page-header reveal" style="text-align: center; margin-bottom: 4rem;">
-            <h1 style="color: var(--text-main);">Find Your Next Flight</h1>
+        <div class="page-header reveal" style="text-align: center; margin-bottom: 3rem;">
+            <h1 style="color: var(--text-main); font-weight: 800;">Find Your Next Flight</h1>
             <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Search from hundreds of national and international flights with premium airlines.</p>
         </div>
 
         <!-- Search Bar -->
-        <div class="card p-4 reveal" style="margin-bottom: 3rem; background: var(--bg-card); border: 1px solid var(--border);">
+        <div class="glass p-4 reveal" style="margin-bottom: 3rem; border: 1px solid var(--border);">
             <form method="GET" action="{% url 'flights_list' %}" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 500;">Origin</label>
-                    <input type="text" name="origin" value="{{ search_origin }}" class="form-control" placeholder="City or Airport" list="cities-list" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg-main); color: var(--text-main);">
+                <div style="flex: 2; min-width: 200px; position: relative;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 600; font-size: 0.9rem;">Origin</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-plane-departure" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+                        <input type="text" name="origin" value="{{ search_origin }}" class="form-control" placeholder="City or Airport" list="cities-list" style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: var(--bg-card); color: var(--text-main); font-family: inherit;">
+                    </div>
                 </div>
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 500;">Destination</label>
-                    <input type="text" name="destination" value="{{ search_dest }}" class="form-control" placeholder="City or Airport" list="cities-list" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg-main); color: var(--text-main);">
+                <div style="flex: 2; min-width: 200px; position: relative;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 600; font-size: 0.9rem;">Destination</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-plane-arrival" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--secondary);"></i>
+                        <input type="text" name="destination" value="{{ search_dest }}" class="form-control" placeholder="City or Airport" list="cities-list" style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: var(--bg-card); color: var(--text-main); font-family: inherit;">
+                    </div>
                 </div>
                 <div style="flex: 1; min-width: 150px;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 500;">Type</label>
-                    <select name="type" class="form-control" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg-main); color: var(--text-main);">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 600; font-size: 0.9rem;">Type</label>
+                    <select name="type" class="form-control" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: var(--bg-card); color: var(--text-main); font-family: inherit;">
                         <option value="">All Flights</option>
                         <option value="national" {% if request.GET.type == 'national' %}selected{% endif %}>National</option>
                         <option value="international" {% if request.GET.type == 'international' %}selected{% endif %}>International</option>
                     </select>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem;">Search</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2.5rem; border-radius: var(--radius-md); font-weight: 700; height: 47px;">
+                        <i class="fa-solid fa-magnifying-glass" style="margin-right: 0.5rem;"></i> Search
+                    </button>
                 </div>
             </form>
             
@@ -40,64 +48,271 @@
             </datalist>
         </div>
 
-        <!-- Flights List -->
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-            {% for flight in flights %}
-            <div class="card reveal" style="display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); flex-wrap: wrap; gap: 1.5rem;">
-                <div style="display: flex; align-items: center; gap: 2rem;">
-                    <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; background: var(--bg-main); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);">
-                        {% if flight.image %}
-                            <img src="{{ flight.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% else %}
-                            <i class="fa-solid fa-plane" style="font-size: 1.5rem; color: var(--primary);"></i>
-                        {% endif %}
+        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+            <div style="color: var(--text-muted); font-size: 0.95rem;">
+                Showing <strong>{{ matching_flights_count }}</strong> flight{% if matching_flights_count != 1 %}s{% endif %} matching your search.
+            </div>
+            {% if search_origin or search_dest or request.GET.type %}
+            <div style="font-size: 0.9rem; color: var(--primary);">
+                Search origin: <strong>{{ search_origin|default:'Any' }}</strong>, destination: <strong>{{ search_dest|default:'Any' }}</strong>, type: <strong>{{ request.GET.type|default:'Any'|capfirst }}</strong>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Layout Grid -->
+        <div style="display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start;">
+            
+            <!-- Filters Sidebar -->
+            <aside class="glass" style="border-radius: var(--radius-xl); padding: 1.75rem; border: 1px solid var(--border); position: sticky; top: 8rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                    <h4 style="margin: 0; color: var(--text-main); font-weight: 700;"><i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Filters</h4>
+                    <button id="reset-filters" style="background: none; border: none; color: var(--primary); font-weight: 700; font-size: 0.8rem; cursor: pointer;">Reset All</button>
+                </div>
+
+                <!-- Price Slider -->
+                <div style="margin-bottom: 2rem;">
+                    <h5 style="margin: 0 0 0.75rem; color: var(--text-main); font-weight: 600; font-size: 0.95rem;">Price Limit</h5>
+                    <input type="range" id="price-range" min="0" max="100000" step="500" value="100000" style="width: 100%; accent-color: var(--primary); cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-top: 0.5rem;">
+                        <span>₹0</span>
+                        <span id="price-display" style="color: var(--primary);">₹100,000</span>
                     </div>
-                    <div>
-                        <h3 style="margin-bottom: 0.25rem; font-size: 1.2rem; color: var(--text-main);">{{ flight.airline }} <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;">{{ flight.flight_number }}</span></h3>
-                        <div style="color: var(--text-muted); font-size: 0.9rem;">
-                            {% if flight.is_international %}
-                            <span style="display: inline-block; padding: 0.1rem 0.5rem; background: rgba(79, 70, 229, 0.1); color: var(--primary); border-radius: var(--radius-sm); font-size: 0.75rem; margin-bottom: 0.5rem;">International</span>
+                </div>
+
+                <!-- Airlines Selector -->
+                <div style="margin-bottom: 2rem;">
+                    <h5 style="margin: 0 0 0.75rem; color: var(--text-main); font-weight: 600; font-size: 0.95rem;">Airlines</h5>
+                    <div id="airline-checkboxes" style="display: flex; flex-direction: column; gap: 0.6rem; max-height: 180px; overflow-y: auto; padding-right: 0.5rem;">
+                        <!-- JS populated dynamic airlines -->
+                    </div>
+                </div>
+
+                <!-- Flight Type Selector -->
+                <div style="margin-bottom: 2rem;">
+                    <h5 style="margin: 0 0 0.75rem; color: var(--text-main); font-weight: 600; font-size: 0.95rem;">Flight Type</h5>
+                    <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-main); cursor: pointer;">
+                            <input type="checkbox" class="type-check" value="national" checked style="accent-color: var(--primary);"> National
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-main); cursor: pointer;">
+                            <input type="checkbox" class="type-check" value="international" checked style="accent-color: var(--primary);"> International
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Sorting Dropdown -->
+                <div>
+                    <h5 style="margin: 0 0 0.75rem; color: var(--text-main); font-weight: 600; font-size: 0.95rem;">Sort By</h5>
+                    <select id="sort-selector" style="width: 100%; padding: 0.6rem; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: var(--bg-card); color: var(--text-main); font-family: inherit; font-size: 0.9rem;">
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="time-asc">Departure: Early first</option>
+                        <option value="time-desc">Departure: Late first</option>
+                    </select>
+                </div>
+            </aside>
+
+            <!-- Flights List Container -->
+            <div id="flights-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                {% for flight in flights %}
+                <div class="card flight-card reveal" 
+                     data-price="{{ flight.price }}" 
+                     data-airline="{{ flight.airline }}" 
+                     data-type="{% if flight.is_international %}international{% else %}national{% endif %}" 
+                     data-timestamp="{{ flight.departure_time|date:'U' }}"
+                     style="display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); flex-wrap: wrap; gap: 1.5rem; transition: all 0.3s ease;">
+                    
+                    <div style="display: flex; align-items: center; gap: 2rem;">
+                        <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; background: var(--bg-main); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);">
+                            {% if flight.image %}
+                                <img src="{{ flight.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
                             {% else %}
-                            <span style="display: inline-block; padding: 0.1rem 0.5rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: var(--radius-sm); font-size: 0.75rem; margin-bottom: 0.5rem;">National</span>
+                                <i class="fa-solid fa-plane" style="font-size: 1.5rem; color: var(--primary);"></i>
                             {% endif %}
                         </div>
-                    </div>
-                </div>
-                
-                <div style="display: flex; align-items: center; gap: 3rem; flex: 1; justify-content: center;">
-                    <div style="text-align: right;">
-                        <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-main);">{{ flight.departure_time|time:"H:i" }}</div>
-                        <div style="font-size: 0.9rem; color: var(--text-muted);">{{ flight.origin }}</div>
-                    </div>
-                    
-                    <div style="flex: 1; max-width: 150px; text-align: center; position: relative;">
-                        <div style="height: 2px; background: var(--border); width: 100%; position: absolute; top: 50%; z-index: 1;"></div>
-                        <i class="fa-solid fa-plane" style="position: relative; z-index: 2; color: var(--primary); background: var(--bg-card); padding: 0 0.5rem;"></i>
+                        <div>
+                            <h3 style="margin-bottom: 0.25rem; font-size: 1.25rem; color: var(--text-main); font-weight: 700;">{{ flight.airline }} <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;">{{ flight.flight_number }}</span></h3>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">
+                                {% if flight.is_international %}
+                                <span style="display: inline-block; padding: 0.15rem 0.6rem; background: rgba(79, 70, 229, 0.1); color: var(--primary); border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700;">International</span>
+                                {% else %}
+                                <span style="display: inline-block; padding: 0.15rem 0.6rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700;">National</span>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                     
-                    <div style="text-align: left;">
-                        <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-main);">Arrival</div>
-                        <div style="font-size: 0.9rem; color: var(--text-muted);">{{ flight.destination }}</div>
+                    <div style="display: flex; align-items: center; gap: 3rem; flex: 1; justify-content: center; min-width: 250px;">
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-main);">{{ flight.departure_time|date:"H:i" }}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">{{ flight.origin }}</div>
+                        </div>
+                        
+                        <div style="flex: 1; max-width: 120px; text-align: center; position: relative;">
+                            <div style="height: 2.5px; background: var(--border); width: 100%; position: absolute; top: 50%; z-index: 1;"></div>
+                            <i class="fa-solid fa-plane" style="position: relative; z-index: 2; color: var(--primary); background: var(--bg-card); padding: 0 0.5rem; font-size: 0.95rem;"></i>
+                        </div>
+                        
+                        <div style="text-align: left;">
+                            <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-main);">Arrival</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">{{ flight.destination }}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: right; min-width: 150px;">
+                        <div style="font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 0.5rem;">₹{{ flight.price }}</div>
+                        <form action="{% url 'checkout' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="service_type" value="FLIGHT">
+                            <input type="hidden" name="service_id" value="{{ flight.id }}">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; border-radius: var(--radius-md);">Book Flight</button>
+                        </form>
                     </div>
                 </div>
+                {% empty %}
+                <div id="no-flights-view" style="text-align: center; padding: 4rem; background: var(--bg-card); border-radius: var(--radius-xl); border: 1px solid var(--border);">
+                    <i class="fa-solid fa-plane-slash" style="font-size: 3rem; color: var(--slate-200); margin-bottom: 1rem; display: block;"></i>
+                    <p style="color: var(--text-muted); font-weight: 600;">No flights found for your search criteria.</p>
+                </div>
+                {% endfor %}
                 
-                <div style="text-align: right; min-width: 150px;">
-                    <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">&#8377; {{ flight.price }}</div>
-                    <form action="{% url 'checkout' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="service_type" value="FLIGHT">
-                        <input type="hidden" name="service_id" value="{{ flight.id }}">
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Book Now</button>
-                    </form>
+                <!-- Fallback empty view for JS filter results -->
+                <div id="js-empty-view" style="display: none; text-align: center; padding: 4rem; background: var(--bg-card); border-radius: var(--radius-xl); border: 1px solid var(--border);">
+                    <i class="fa-solid fa-plane-slash" style="font-size: 3rem; color: var(--slate-200); margin-bottom: 1rem; display: block;"></i>
+                    <p style="color: var(--text-muted); font-weight: 600;">No flights match your active sidebar filters.</p>
                 </div>
             </div>
-            {% empty %}
-            <div style="text-align: center; padding: 4rem; background: var(--bg-card); border-radius: var(--radius-xl); border: 1px solid var(--border);">
-                <i class="fa-solid fa-plane-slash" style="font-size: 3rem; color: var(--slate-200); margin-bottom: 1rem; display: block;"></i>
-                <p style="color: var(--text-muted);">No flights found for your search criteria.</p>
-            </div>
-            {% endfor %}
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const flightsContainer = document.getElementById("flights-container");
+        const cards = Array.from(document.querySelectorAll(".flight-card"));
+        const priceRange = document.getElementById("price-range");
+        const priceDisplay = document.getElementById("price-display");
+        const airlineCheckboxesContainer = document.getElementById("airline-checkboxes");
+        const typeCheckboxes = document.querySelectorAll(".type-check");
+        const sortSelector = document.getElementById("sort-selector");
+        const resetBtn = document.getElementById("reset-filters");
+        const jsEmptyView = document.getElementById("js-empty-view");
+
+        if (cards.length === 0) return;
+
+        // 1. Determine price limits & dynamic airlines list
+        let maxPrice = 0;
+        const uniqueAirlines = new Set();
+        
+        cards.forEach(card => {
+            const price = parseFloat(card.getAttribute("data-price"));
+            if (price > maxPrice) maxPrice = price;
+            
+            uniqueAirlines.add(card.getAttribute("data-airline"));
+        });
+
+        // Configure slider bounds
+        priceRange.max = Math.ceil(maxPrice / 1000) * 1000;
+        priceRange.value = priceRange.max;
+        priceDisplay.innerText = "₹" + Number(priceRange.value).toLocaleString('en-IN');
+
+        // Populate airline checkboxes dynamically
+        uniqueAirlines.forEach(airline => {
+            const label = document.createElement("label");
+            label.style.display = "flex";
+            label.style.alignItems = "center";
+            label.style.gap = "0.5rem";
+            label.style.fontSize = "0.9rem";
+            label.style.color = "var(--text-main)";
+            label.style.cursor = "pointer";
+            
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "airline-check";
+            checkbox.value = airline;
+            checkbox.checked = true;
+            checkbox.style.accentColor = "var(--primary)";
+            
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(airline));
+            airlineCheckboxesContainer.appendChild(label);
+        });
+
+        // 2. Real-time Filter & Sort Function
+        const updateFilters = () => {
+            const currentPriceLimit = parseFloat(priceRange.value);
+            priceDisplay.innerText = "₹" + currentPriceLimit.toLocaleString('en-IN');
+
+            const activeAirlines = Array.from(document.querySelectorAll(".airline-check:checked")).map(c => c.value);
+            const activeTypes = Array.from(typeCheckboxes).filter(c => c.checked).map(c => c.value);
+
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const price = parseFloat(card.getAttribute("data-price"));
+                const airline = card.getAttribute("data-airline");
+                const type = card.getAttribute("data-type");
+
+                const matchesPrice = price <= currentPriceLimit;
+                const matchesAirline = activeAirlines.includes(airline);
+                const matchesType = activeTypes.includes(type);
+
+                if (matchesPrice && matchesAirline && matchesType) {
+                    card.style.display = "flex";
+                    visibleCount++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            // Show empty fallback if none visible
+            if (visibleCount === 0) {
+                jsEmptyView.style.display = "block";
+            } else {
+                jsEmptyView.style.display = "none";
+            }
+        };
+
+        // 3. Sorting Execution
+        const sortCards = () => {
+            const sortBy = sortSelector.value;
+            const sortedCards = [...cards];
+
+            sortedCards.sort((a, b) => {
+                if (sortBy === "price-asc") {
+                    return parseFloat(a.getAttribute("data-price")) - parseFloat(b.getAttribute("data-price"));
+                } else if (sortBy === "price-desc") {
+                    return parseFloat(b.getAttribute("data-price")) - parseFloat(a.getAttribute("data-price"));
+                } else if (sortBy === "time-asc") {
+                    return parseInt(a.getAttribute("data-timestamp")) - parseInt(b.getAttribute("data-timestamp"));
+                } else if (sortBy === "time-desc") {
+                    return parseInt(b.getAttribute("data-timestamp")) - parseInt(a.getAttribute("data-timestamp"));
+                }
+                return 0;
+            });
+
+            // Re-append sorted cards in container
+            sortedCards.forEach(card => flightsContainer.appendChild(card));
+        };
+
+        // 4. Attach Event Listeners
+        priceRange.addEventListener("input", updateFilters);
+        airlineCheckboxesContainer.addEventListener("change", updateFilters);
+        typeCheckboxes.forEach(cb => cb.addEventListener("change", updateFilters));
+        sortSelector.addEventListener("change", sortCards);
+
+        resetBtn.addEventListener("click", () => {
+            priceRange.value = priceRange.max;
+            document.querySelectorAll(".airline-check").forEach(c => c.checked = true);
+            typeCheckboxes.forEach(c => c.checked = true);
+            sortSelector.selectedIndex = 0;
+            updateFilters();
+            sortCards();
+        });
+
+        // Initialize sorting & filtering defaults on load
+        sortCards();
+        updateFilters();
+    });
+</script>
 {% endblock %}
